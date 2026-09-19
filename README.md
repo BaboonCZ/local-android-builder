@@ -109,3 +109,7 @@ json
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 📸 Preview
+
+<img width="476" height="475" alt="builder_en" src="https://github.com/user-attachments/assets/675a6d95-b901-4172-91b7-f70111800d0f" />
