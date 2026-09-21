@@ -58,17 +58,17 @@ Fully interactive, keyboard-driven CLI menu natively localized in **English**, *
 
 ---
 
-## 🗂️ Project Structure
+## 📁 Project Structure
 
-"""text
-├── builder.ps1          # Core PowerShell execution script
-├── builder.cmd          # Command prompt launcher alias (auto-generated)
-├── builder.ini          # Configuration file (stores settings & DPAPI encrypted SFTP hash)
-├── .templates/          # Scaffolding templates (app.json, fallback assets)
+```text
+├── builder.ps1        # Core PowerShell execution script
+├── builder.cmd        # Command prompt launcher alias (auto-generated)
+├── builder.ini        # Configuration file (stores settings & DPAPI encrypted SFTP hash)
+├── .templates/        # Scaffolding templates (app.json, fallback assets)
 │   ├── expo/
 │   └── nodejs/
-└── .backup/             # Destination directory for all project ZIP archives
-"""
+└── .backup/           # Destination directory for all project ZIP archives
+```
 
 ---
 
@@ -113,3 +113,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## 📸 Preview
 
 <img width="476" height="475" alt="builder_en" src="https://github.com/user-attachments/assets/675a6d95-b901-4172-91b7-f70111800d0f" />
+
+💡 **Pro tip:** If you set your target output folder for APK files to a directory synced with OneDrive or Google Drive, your built apps will automatically sync straight to your phone.
