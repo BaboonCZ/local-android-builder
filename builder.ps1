@@ -79,6 +79,7 @@ $global:configMenuIndex = 0
 $global:projectMenuIndex = 3
 $global:wizardMenuIndex = 0
 $global:sftpMenuIndex = 0
+$global:gitMenuIndex = 0
 
 # --- LOKALIZAČNÍ SLOVNÍK (EN / CZ / DE) ---
 function Get-Text {
@@ -91,6 +92,7 @@ function Get-Text {
             RestoreBackup = "[R] RESTORE PROJECT FROM BACKUP (ZIP)"
             Settings      = "[S] BUILDER SETTINGS"
             Exit          = "[X] EXIT BUILDER"
+            UpdateBuilder = "[U] Update Builder from GitHub"
             DevNick       = "Developer Nickname"
             LangSelect    = "Language"
             OpenJson      = "Open app.json"
@@ -100,6 +102,17 @@ function Get-Text {
             TargetPath    = "APK Output Target Path"
             Back          = "<-- BACK TO MENU"
             PressKey      = "Press any key to continue..."
+
+            # GitHub & Git Clone
+            ActGitClone      = "[G] Clone project from GitHub"
+            GitTitle         = "GITHUB DEPLOYMENT & SYNC"
+            EnterGitRepo     = "Enter USER/repo (e.g. BaboonCZ/local-android-builder)"
+            EnterCommitMsg   = "Enter commit message (Press Enter for 'Auto-sync')"
+            EnterLocalFolder = "Local folder name [Default: {0}]"
+            CloningRepo      = "=== Cloning project from GitHub... ==="
+            CloneSuccess     = "[DONE] Project successfully cloned and prepared!"
+            CloneFail        = "[ERROR] Cloning failed. Check permissions and repository name."
+            FolderExistsErr  = "[ERROR] Folder already exists:"
             
             # Akce projektu
             Act1 = "Open configured files in Notepad++"
@@ -128,6 +141,7 @@ function Get-Text {
             CleanCacheSuccess = "[OK] Temporary files and caches successfully cleaned!"
             
             # Hlášky a výzvy
+            InstallingDeps = "Installing dependencies (npm install)..."
             EnterProjName = "Enter project name (or press Enter to cancel)"
             ProjExists = "Project with this name already exists!"
             CreatingProj = "=== Creating new project: "
@@ -168,6 +182,7 @@ function Get-Text {
             RestoreBackup = "[R] OBNOVIT PROJEKT ZE ZÁLOHY (ZIP)"
             Settings      = "[S] NASTAVENÍ BUILDERU"
             Exit          = "[X] UKONČIT BUILDER"
+            UpdateBuilder = "[U] Aktualizovat Builder z GitHubu"
             DevNick       = "Jméno vývojáře (Nick)"
             LangSelect    = "Jazyk (Language)"
             OpenJson      = "Otevírat app.json"
@@ -177,6 +192,17 @@ function Get-Text {
             TargetPath    = "Cílová složka APK"
             Back          = "<-- ZPĚT DO MENU"
             PressKey      = "Stiskni libovolnou klávesu..."
+
+            # GitHub & Git Clone
+            ActGitClone      = "[G] Klonovat projekt z GitHubu"
+            GitTitle         = "GITHUB NASAZENÍ A SYNCHRONIZACE"
+            EnterGitRepo     = "Zadej USER/repo (např. BaboonCZ/local-android-builder)"
+            EnterCommitMsg   = "Zadej zprávu commitu (Enter pro 'Auto-sync')"
+            EnterLocalFolder = "Název lokální složky [Výchozí: {0}]"
+            CloningRepo      = "=== Stahuji projekt z GitHubu... ==="
+            CloneSuccess     = "[HOTOVO] Projekt byl úspěšně naklonován a připraven!"
+            CloneFail        = "[CHYBA] Klonování selhalo. Zkontroluj práva a název repozitáře."
+            FolderExistsErr  = "[CHYBA] Složka již existuje:"
             
             Act1 = "Otevřít nastavené soubory v Notepad++"
             Act2 = "Instalovat Expo/NPM balíčky"
@@ -189,6 +215,7 @@ function Get-Text {
             ActDel = "Smazat projekt"
             ActBack = "<-- ZPĚT DO NABÍDKY PROJEKTŮ"
             
+            InstallingDeps = "Instaluji závislosti (npm install)..."
             SetupWizTitle = "PRŮVODCE INSTALACÍ PROSTŘEDÍ (STAV SYSTÉMU)"
             CheckingWinget = "Kontroluji online verze v wingetu..."
             Installed = "[ NAINSTALOVÁNO ]"
@@ -242,6 +269,7 @@ function Get-Text {
             RestoreBackup = "[R] PROJEKT AUS BACKUP WIEDERHERSTELLEN (ZIP)"
             Settings      = "[S] BUILDER-EINSTELLUNGEN"
             Exit          = "[X] BUILDER BEENDEN"
+            UpdateBuilder = "[U] Builder von GitHub aktualisieren"
             DevNick       = "Entwickler-Name (Nick)"
             LangSelect    = "Sprache (Language)"
             OpenJson      = "app.json öffnen"
@@ -251,6 +279,17 @@ function Get-Text {
             TargetPath    = "APK-Zielpfad"
             Back          = "<-- ZURÜCK ZUM MENÜ"
             PressKey      = "Drücken Sie eine beliebige Taste..."
+
+            # GitHub & Git Clone
+            ActGitClone      = "[G] Projekt von GitHub klonen"
+            GitTitle         = "GITHUB DEPLOYMENT & SYNC"
+            EnterGitRepo     = "Geben Sie USER/repo ein (z. B. BaboonCZ/local-android-builder)"
+            EnterCommitMsg   = "Commit-Nachricht eingeben (Enter für 'Auto-sync')"
+            EnterLocalFolder = "Lokaler Ordnername [Standard: {0}]"
+            CloningRepo      = "=== Projekt wird von GitHub geklont... ==="
+            CloneSuccess     = "[FERTIG] Projekt erfolgreich geklont und eingerichtet!"
+            CloneFail        = "[FEHLER] Klonen fehlgeschlagen. Prüfen Sie Rechte und Repository-Name."
+            FolderExistsErr  = "[FEHLER] Ordner existiert bereits:"
             
             Act1 = "Konfigurierte Dateien in Notepad++ öffnen"
             Act2 = "Expo/NPM Pakete installieren"
@@ -263,6 +302,7 @@ function Get-Text {
             ActDel = "Projekt löschen"
             ActBack = "<-- ZURÜCK ZUR PROJEKTLISTE"
             
+            InstallingDeps = "Installiere Abhängigkeiten (npm install)..."
             ActCleanCache = "Cache & temporäre Dateien bereinigen (Metro, Android, Node)"
             CleanCacheTitle = "=== BEREINIGUNG VON CACHE UND TEMPORÄREN DATEIEN ==="
             CleanCacheSuccess = "[FERTIG] Temporäre Dateien und Cache erfolgreich bereinigt!"
@@ -569,6 +609,69 @@ function Show-SetupSFTP {
         }
     }
 }
+function Show-GitHub {
+    while ($true) {
+        $cfg = Get-Config
+        $L = $cfg.Language
+        
+        $opts = @(
+            "Git init",
+            "Git remote add",
+            "Git status",
+            "Git push",
+            "Git pull",
+            "$(Get-Text 'Back' $L)"
+        )
+
+        $idx = Show-Menu -Title "GitHub DEPLOYMENT" -Options $opts -InitialIndex $global:gitMenuIndex
+        
+        # Opuštění menu (Esc nebo volba Zpět)
+        if ($idx -eq -1 -or $idx -eq ($opts.Count - 1)) { 
+            return 
+        }
+
+        $global:gitMenuIndex = $idx
+        Clear-Host
+        
+        switch ($idx) {
+            0 {
+                git init
+                Write-Host "`n$(Get-Text 'PressKey' $L)" -ForegroundColor Gray
+                $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+            }
+            1 {
+                $inDeposit = Read-Host "Set USER/repo.git (e.g. BaboonCZ/local-android-builder)"
+                if (-not [string]::IsNullOrWhiteSpace($inDeposit)) {
+                    $Deposit = $inDeposit.Trim()
+                    git remote add origin "https://github.com/$Deposit"
+                }
+                Write-Host "`n$(Get-Text 'PressKey'$L)" -ForegroundColor Gray
+                $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+            }
+            2 {
+                git status
+                Write-Host "`n$(Get-Text 'PressKey'$L)" -ForegroundColor Gray
+                $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+            }
+            3 {
+                git add .
+                $msg = Read-Host "Enter commit message (or press Enter for 'Auto-sync')"
+                if ([string]::IsNullOrWhiteSpace($msg)) {$msg = "Auto-sync" }
+                
+                git commit -m "$msg"
+                git push -u origin HEAD
+                
+                Write-Host "`n$(Get-Text 'PressKey' $L)" -ForegroundColor Gray
+                $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+            }
+            4 {
+                git pull --rebase
+                Write-Host "`n$(Get-Text 'PressKey'$L)" -ForegroundColor Gray
+                $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+            }
+        }
+    }
+}
 
 function Save-Config ($cfg) {
     $sb = New-Object System.Text.StringBuilder
@@ -726,17 +829,42 @@ function Open-InNotepadPlusPlus {
     }
 }
 
-function Open-SelfInNotepad {
-    $nppPaths = @(
-        "C:\Program Files\Notepad++\notepad++.exe",
-        "C:\Program Files (x86)\Notepad++\notepad++.exe"
-    )
-    $exe = $nppPaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+function Update-SelfFromGitHub {
+    $cfg = Get-Config
+    $L = $cfg.Language
 
-    if (-not $exe) { return }
+    Write-Host "`n=== UPDATING BUILDER FROM GITHUB ===" -ForegroundColor Cyan
+    Write-Host "Repository: BaboonCZ/local-android-builder`n" -ForegroundColor Gray
 
-    Write-Host "`n=== OPENING BUILDER.PS1 IN NOTEPAD++ ===" -ForegroundColor Cyan
-    Start-Process -FilePath $exe -ArgumentList "`"$selfScriptPath`""
+    $runningScriptPath = $PSCommandPath
+    if ([string]::IsNullOrWhiteSpace($runningScriptPath)) { $runningScriptPath = $selfScriptPath }
+
+    $rawUrl = "https://raw.githubusercontent.com/BaboonCZ/local-android-builder/main/builder.ps1"
+    $tempFile = Join-Path $env:TEMP "builder_update.ps1"
+
+    try {
+        # 1. Stažení aktuálního kódu
+        Invoke-WebRequest -Uri $rawUrl -OutFile $tempFile -UseBasicParsing -ErrorAction Stop
+
+        if (Test-Path $tempFile) {
+            # 2. Přepsání běžeckého souboru na disku
+            Copy-Item -Path $tempFile -Destination $runningScriptPath -Force
+            Remove-Item $tempFile -Force -ErrorAction SilentlyContinue
+
+            Write-Host "[OK] Builder.ps1 byl úspěšně aktualizován!" -ForegroundColor Green
+            Write-Host "[INFO] Restartuji Builder s novou verzí..." -ForegroundColor Yellow
+            Start-Sleep -Seconds 1
+
+            # 3. Otevření nového okna s novou verzí a ukončení starého procesu
+            Start-Process powershell -ArgumentList "-ExecutionPolicy Bypass -NoProfile -File `"$runningScriptPath`""
+            exit
+        }
+    }
+    catch {
+        Write-Host "[ERROR] Selhalo stažení aktualizace z GitHubu: $_" -ForegroundColor Red
+        Write-Host "`n$(Get-Text 'PressKey'$L)" -ForegroundColor Gray
+        $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+    }
 }
 
 function Show-Menu {
@@ -845,6 +973,7 @@ function Show-SetupWizard {
     $asOnline = Get-WingetOnlineVersion "Google.AndroidStudio"
     $nppOnline = Get-WingetOnlineVersion "Notepad++.Notepad++"
     $codeOnline = Get-WingetOnlineVersion "Microsoft.VisualStudioCode"
+    $gitOnline = Get-WingetOnlineVersion "Git.Git"
 
         while ($true) {
             Update-SessionPath
@@ -864,6 +993,19 @@ function Show-SetupWizard {
                 if ($jOut -match 'version "(17\.[^"]+)"') { "v" + $matches[1] } else { $null }
             } catch { $null }
             
+            $gitVer = try { 
+                $gOut = (git --version 2>&1 | Out-String)
+                if ($gOut -match 'version (\d+\.\d+\.\d+)') { "v" + $matches[1] } else { $null }
+            } catch { $null }
+
+            $gitStatus = if (-not $gitVer) {
+                $(Get-Text 'NotInstalled' $L)
+            } elseif ($gitOnline -and $gitOnline -ne "?" -and $gitVer.TrimStart('v') -ne $gitOnline.TrimStart('v')) {
+                "[ $gitVer ] -> NEED UPDATE (v$gitOnline)"
+            } else {
+                "[ $gitVer ]"
+            }
+
             # Zkrácení na major.minor.patch (např. 17.0.20)
             $jLocalShort  = ($javaVer.TrimStart('v') -split '\.')[0..2] -join '.'
             $jOnlineShort = ($javaOnline.TrimStart('v') -split '\.')[0..2] -join '.'
@@ -983,15 +1125,17 @@ function Show-SetupWizard {
             $allEnvValid = ($javaEnvValid -and $androidEnvValid)
 
             $steps = @()
-            $steps += "Node.js:               $nodeStatus"
-            $steps += "OpenJDK 17:            $javaStatus"
-            $steps += "Android Studio:        $asStatus"
-            $steps += "Notepad++:             $nppStatus"
-            $steps += "VS Code Editor:        $codeStatus"
-            $steps += "VS Code - Continue AI: $aiStatus"
-            $steps += "Android SDK:           $sdkStatus"
-            $steps += "JAVA_HOME:             $javaEnvStatus"
-            $steps += "ANDROID_HOME:          $androidEnvStatus"
+            $steps += "Node.js:                 $nodeStatus"
+            $steps += "OpenJDK 17:              $javaStatus"
+            $steps += "Android Studio:          $asStatus"
+            $steps += "Notepad++:               $nppStatus"
+            $steps += "VS Code Editor:          $codeStatus"
+            $steps += "VS Code - Continue AI:   $aiStatus"
+            $steps += "Git (GitHub):            $gitStatus"
+            $steps += "Android SDK:             $sdkStatus"
+            $steps += "JAVA_HOME:               $javaEnvStatus"
+            $steps += "ANDROID_HOME:           $androidEnvStatus"
+
 
             if (-not $allAppsInstalled) { $steps += $(Get-Text 'RunAutoInstall' $L) }
 
@@ -1040,12 +1184,17 @@ function Show-SetupWizard {
                 $codeBin = Get-CodeCliPath
                 if ($codeBin) { & $codeBin --install-extension continue.continue --force }
             }
-            6 { # Android SDK
+            6 { # Git
+                Test-AdminPrivileges
+                winget install --id Git.Git -e --force --accept-package-agreements --accept-source-agreements
+                Update-SessionPath
+            }
+            7 { # Android SDK
                 Test-AdminPrivileges
                 winget install --id Google.AndroidSDK.PlatformTools -e --force --accept-package-agreements --accept-source-agreements
                 Update-SessionPath
             }
-            7 { # JAVA_HOME
+            8 { # JAVA_HOME
                 Test-AdminPrivileges
                 $javaPaths = Get-ChildItem "C:\Program Files\Eclipse Adoptium", "C:\Program Files\Java" -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '17' }
                 if ($javaPaths) {
@@ -1054,7 +1203,7 @@ function Show-SetupWizard {
                 }
                 Update-SessionPath
             }
-            8 { # ANDROID_HOME
+            9 { # ANDROID_HOME
                 Test-AdminPrivileges
                 if (Test-Path $sdkDefault) {
                     [System.Environment]::SetEnvironmentVariable("ANDROID_HOME", $sdkDefault, "User")
@@ -1189,7 +1338,7 @@ function Restore-ProjectFromBackup {
         }
 
         Set-Location $targetProjectPath
-        Write-Host "`nInstaluji závislosti (npm install)..." -ForegroundColor Cyan
+        Write-Host "`n$(Get-Text 'InstallingDeps' $L)" -ForegroundColor Cyan
         npm install
 
         # Specifické post-install kroky pouze pro Expo
@@ -1389,7 +1538,7 @@ function Show-ConfigMenu {
             ("{0,-32} : {1}"   -f $(Get-Text 'DevNick' $L), $cfg.Nick),
             ("{0,-32} : [{1}]" -f $(Get-Text 'LangSelect' $L), $cfg.Language),
             ("{0,-32} : {1}"   -f $(Get-Text 'KeystorePath' $L), $cfg.KeystorePath),
-            "[E] EDIT BUILDER.PS1",
+            "$(Get-Text 'UpdateBuilder' $L)",
             "[F] SFTP DEPLOYMENT CONFIGURATION",
             "[I] SETUP WIZARD (SYSTEM STATUS)",
             "$(Get-Text 'Back' $L)"
@@ -1468,8 +1617,8 @@ function Show-ConfigMenu {
                     Save-Config $cfg
                 }
             }
-            "[E] EDIT BUILDER.PS1" { 
-                Open-SelfInNotepad 
+            "$(Get-Text 'UpdateBuilder' $L)" { 
+                Update-SelfFromGitHub 
             }
             "[F] SFTP DEPLOYMENT CONFIGURATION" { 
                 Show-SetupSFTP 
@@ -1487,6 +1636,7 @@ while ($true) {
 
     $cfg = Get-Config
     $L = $cfg.Language
+    $isGitInstalled = [bool](Get-Command "git" -ErrorAction SilentlyContinue)
 
     $rawProjects = @(Get-ChildItem -Path $projectsRoot -Directory | 
                 Where-Object { $_.Name -notmatch '^[_\.]' -and $_.Name -ne 'android' } | 
@@ -1508,6 +1658,8 @@ while ($true) {
 
     $menuList += "$(Get-Text 'CreateNew' $L)"
     $menuList += "$(Get-Text 'RestoreBackup' $L)"
+    if ($isGitInstalled) {$menuList += "$(Get-Text 'ActGitClone' $L)"
+    }
     $menuList += "$(Get-Text 'Settings' $L)"
     $menuList += "$(Get-Text 'Exit' $L)"
 
@@ -1517,10 +1669,20 @@ while ($true) {
         return
     }
 
-    $lastIndex = $menuList.Count - 1      
-    $configIndex = $menuList.Count - 2    
-    $restoreIndex = $menuList.Count - 3   
-    $newProjIndex = $menuList.Count - 4   
+    if ($isGitInstalled) {
+        $lastIndex     = $menuList.Count - 1      
+        $configIndex   = $menuList.Count - 2    
+        $GitCloneIndex = $menuList.Count - 3
+        $restoreIndex  = $menuList.Count - 4
+        $newProjIndex  = $menuList.Count - 5
+    }
+    else {
+        $lastIndex     = $menuList.Count - 1      
+        $configIndex   = $menuList.Count - 2    
+        $restoreIndex  = $menuList.Count - 3
+        $newProjIndex  = $menuList.Count - 4
+        $GitCloneIndex = -99  # Pojistka proti $null porovnání
+    }
 
     if ($pIndex -eq $lastIndex) {
         Clear-Host
@@ -1536,6 +1698,49 @@ while ($true) {
         Restore-ProjectFromBackup -RootPath $projectsRoot -Lang $L
         continue
     }
+
+    if ($pIndex -eq $GitCloneIndex) {
+        Clear-Host
+        Write-Host (Get-Text 'GitTitle' $L) -ForegroundColor Cyan
+        $repoInput = Read-Host (Get-Text 'EnterGitRepo' $L)
+
+        if ([string]::IsNullOrWhiteSpace($repoInput)) {
+            continue
+        }
+
+        if (-not [string]::IsNullOrWhiteSpace($repoInput)) {
+            # Vytáhne název projektu za lomítkem pro návrh složky
+            $defaultFolder = ($repoInput -split '/')[-1].Replace('.git','')
+
+            # Formátovaný dotaz na název složky podle jazyka
+            $targetFolder = (Get-Text 'EnterLocalFolder' $L) -f $defaultFolder
+            if ([string]::IsNullOrWhiteSpace($targetFolder)) { $targetFolder =$defaultFolder }
+
+            $targetPath = Join-Path $projectsRoot$targetFolder
+            
+            if (Test-Path $targetPath) {
+                Write-Host "`n$(Get-Text 'FolderExistsErr' $L) $targetFolder" -ForegroundColor Red
+            } else {
+                # 1. Stažení čistého kódu a git historie
+                Write-Host "`n$(Get-Text 'CloningRepo'$L)" -ForegroundColor Yellow
+                git clone "https://github.com/$repoInput.git" $targetPath
+                
+                if ($LASTEXITCODE -eq 0) {
+                    # 2. Instalace knihoven
+                    Set-Location $targetPath
+                    Write-Host "`n$(Get-Text 'InstallingDeps' $L)" -ForegroundColor Yellow
+                    npm install
+                    
+                    # Volitelně pro Expo projekty: npx expo prebuild --clean
+                    
+                    Write-Host "`n$(Get-Text 'CloneSuccess'$L)" -ForegroundColor Green
+                } else {
+                    Write-Host "`n$(Get-Text 'CloneFail' $L)" -ForegroundColor Red
+                }
+            }
+        }
+    }
+
     # --- NOVÝ PROJEKT ---
     if ($pIndex -eq $newProjIndex) {
         # 1. KROK: VÝBĚR TYPU PROJEKTU (NEJPRVE)
@@ -1685,6 +1890,9 @@ while ($true) {
             "$(Get-Text 'Act7' $L)"
             "$(Get-Text 'ActAabBuild' $L)"
             "$(Get-Text 'ActCleanCache' $L)"           
+            }
+            if ($isGitInstalled) {
+                "GitHub"
             }
             "$(Get-Text 'ActBackup' $L)"
             "$(Get-Text 'ActDel' $L)"
@@ -1904,6 +2112,11 @@ while ($true) {
                 Write-Host "[6/6] Verifying project integrity..." -ForegroundColor Yellow
                 
                 Write-Host "`n$(Get-Text 'CleanCacheSuccess' $L)" -ForegroundColor Green
+            }
+
+            "GitHub" {
+                Show-GitHub
+                $skipPause = $true
             }
 
             "$(Get-Text 'ActBackup' $L)" {
