@@ -1,0 +1,8 @@
+# Ignorovat všechny soubory a složky
+/*
+
+# Výjimky (jediné soubory, které chceme na GitHubu):
+!/builder.ps1
+!/README.md
+!/.gitignore
+!/LICENSE
