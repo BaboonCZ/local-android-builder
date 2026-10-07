@@ -766,13 +766,13 @@ function Show-GitHub {
                     $Deposit = $inDeposit.Trim()
                     git remote add origin "https://github.com/$Deposit"
                 }
-                Write-Host "`n$(Get-Text 'PressKey'$L)" -ForegroundColor Gray
-                $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+                Write-Host "`n$(Get-Text 'PressKey' $L)" -ForegroundColor Gray
+                $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
             }
             2 {
                 git status
-                Write-Host "`n$(Get-Text 'PressKey'$L)" -ForegroundColor Gray
-                $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+                Write-Host "`n$(Get-Text 'PressKey' $L)" -ForegroundColor Gray
+                $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
             }
             3 {
                 git add .
@@ -787,8 +787,8 @@ function Show-GitHub {
             }
             4 {
                 git pull --rebase
-                Write-Host "`n$(Get-Text 'PressKey'$L)" -ForegroundColor Gray
-                $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+                Write-Host "`n$(Get-Text 'PressKey' $L)" -ForegroundColor Gray
+                $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
             }
         }
     }
@@ -983,8 +983,8 @@ function Update-SelfFromGitHub {
     }
     catch {
         Write-Host "[ERROR] Selhalo stažení aktualizace z GitHubu: $_" -ForegroundColor Red
-        Write-Host "`n$(Get-Text 'PressKey'$L)" -ForegroundColor Gray
-        $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        Write-Host "`n$(Get-Text 'PressKey' $L)" -ForegroundColor Gray
+        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
     }
 }
 
@@ -1096,7 +1096,7 @@ function Show-SetupWizard {
     Update-SessionPath
     if (-not $pathRegistered -or -not (Test-PathContainsDirectory -PathValue $env:Path -Directory $scriptDir)) {
         Write-Host "`n[ERROR] The Builder directory could not be verified in PATH. The setup wizard cannot continue." -ForegroundColor Red
-        Write-Host "`n$(Get-Text 'PressKey'$L)" -ForegroundColor Gray
+        Write-Host "`n$(Get-Text 'PressKey' $L)" -ForegroundColor Gray
         $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         return
     }
@@ -1104,7 +1104,7 @@ function Show-SetupWizard {
     if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
         Write-Host "`n[ERROR] The 'winget' tool is not installed or available in PATH on this system!" -ForegroundColor Red
         Write-Host "Please install 'App Installer' from the Microsoft Store or install the packages manually." -ForegroundColor Yellow
-        Write-Host "`n$(Get-Text 'PressKey'$L)" -ForegroundColor Gray
+        Write-Host "`n$(Get-Text 'PressKey' $L)" -ForegroundColor Gray
         $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         return
     }
@@ -1859,15 +1859,15 @@ while ($true) {
 
             # Formátovaný dotaz na název složky podle jazyka
             $targetFolder = (Get-Text 'EnterLocalFolder' $L) -f $defaultFolder
-            if ([string]::IsNullOrWhiteSpace($targetFolder)) { $targetFolder =$defaultFolder }
+            if ([string]::IsNullOrWhiteSpace($targetFolder)) { $targetFolder = $defaultFolder }
 
-            $targetPath = Join-Path $projectsRoot$targetFolder
+            $targetPath = Join-Path $projectsRoot $targetFolder
             
             if (Test-Path $targetPath) {
                 Write-Host "`n$(Get-Text 'FolderExistsErr' $L) $targetFolder" -ForegroundColor Red
             } else {
                 # 1. Stažení čistého kódu a git historie
-                Write-Host "`n$(Get-Text 'CloningRepo'$L)" -ForegroundColor Yellow
+                Write-Host "`n$(Get-Text 'CloningRepo' $L)" -ForegroundColor Yellow
                 git clone "https://github.com/$repoInput.git" $targetPath
                 
                 if ($LASTEXITCODE -eq 0) {
@@ -1878,7 +1878,7 @@ while ($true) {
                     
                     # Volitelně pro Expo projekty: npx expo prebuild --clean
                     
-                    Write-Host "`n$(Get-Text 'CloneSuccess'$L)" -ForegroundColor Green
+                    Write-Host "`n$(Get-Text 'CloneSuccess' $L)" -ForegroundColor Green
                 } else {
                     Write-Host "`n$(Get-Text 'CloneFail' $L)" -ForegroundColor Red
                 }
