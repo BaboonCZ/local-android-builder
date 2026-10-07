@@ -223,6 +223,19 @@ function Get-Text {
             TargetPath    = "APK Output Target Path"
             Back          = "<-- BACK TO MENU"
             PressKey      = "Press any key to continue..."
+            NickPrompt    = "Nickname"
+            NickSetupTitle = "DEVELOPER NICKNAME SETUP"
+            NickSetupPrompt = "Enter developer nickname (e.g. BestDeveloper):"
+            LanguagePrompt = "Select language [Default: 1]"
+            LanguageTitle = "LANGUAGE SELECTION"
+            LanguageEnglish = "English (EN)"
+            LanguageGerman  = "Deutsch (DE)"
+            LanguageCzech   = "Čeština (CZ)"
+            MenuInstructions = "UP/DOWN arrows, numbers (1-{0}) or Enter to select:`n"
+            SelectIndex   = "Select index"
+            NotSet        = "[NOT SET]"
+            SftpSettings  = "[F] SFTP DEPLOYMENT CONFIGURATION"
+            WizardSettings = "[I] SETUP WIZARD (SYSTEM STATUS)"
 
             # GitHub & Git Clone
             ActGitClone      = "[G] Clone project from GitHub"
@@ -234,7 +247,14 @@ function Get-Text {
             CloneSuccess     = "[DONE] Project successfully cloned and prepared!"
             CloneFail        = "[ERROR] Cloning failed. Check permissions and repository name."
             FolderExistsErr  = "[ERROR] Folder already exists:"
-            
+            GitHubMenuTitle  = "GitHub DEPLOYMENT"
+            GitInit          = "Git init"
+            GitRemoteAdd     = "Git remote add"
+            GitStatus        = "Git status"
+            GitPush          = "Git push"
+            GitPull          = "Git pull"
+            GitRemotePrompt  = "Set USER/repo.git (e.g. BaboonCZ/local-android-builder)"
+
             # Akce projektu
             Act1 = "Open configured files in Notepad++"
             Act2 = "Install Expo/NPM packages"
@@ -254,6 +274,18 @@ function Get-Text {
             NotInstalled = "[ NOT INSTALLED ]"
             MissingMod = "[ MISSING MODULE ]"
             BadVer = "[ MISSING OR WRONG VERSION! ]"
+            UpdateNeeded = "-> NEED UPDATE (v{0})"
+            StatusOk = "[ OK: {0} ]"
+            WizardNode = "Node.js:"
+            WizardJava = "OpenJDK 17:"
+            WizardAndroidStudio = "Android Studio:"
+            WizardNotepad = "Notepad++:"
+            WizardVSCode = "VS Code Editor:"
+            WizardContinue = "VS Code - Continue AI:"
+            WizardGit = "Git (GitHub):"
+            WizardSdk = "Android SDK:"
+            WizardJavaHome = "JAVA_HOME:"
+            WizardAndroidHome = "ANDROID_HOME:"
             RunAutoInstall = "[>>>] RUN AUTOMATIC INSTALLATION OF MISSING APPS [<<<]"
             RunAutoEnv = "[A] AUTOMATICALLY CONFIGURE WINDOWS ENV (JAVA_HOME & ANDROID_HOME)"
             WizBack = "<-- BACK TO SETTINGS"
@@ -296,6 +328,62 @@ function Get-Text {
             KeystorePath = "Play Store Keystore Path"
             ActAabBuild = "Build App Bundle for Play Store (.aab)"
             SFTPupload = "Upload on SFTP"
+            SftpMenuTitle = "SFTP DEPLOYMENT CONFIGURATION"
+            SftpHost = "SFTP Host"
+            SftpPort = "SFTP Port"
+            SftpUser = "SFTP User"
+            SftpPassword = "SFTP Password"
+            SftpRemoteDirectory = "Remote Directory"
+            SftpBaseUrl = "Base HTTP URL"
+            SftpHostPrompt = "SFTP Host (e.g. sftp.webhosting.com)"
+            SftpPortPrompt = "SFTP Port [Default: 22]"
+            SftpUserPrompt = "SFTP User"
+            SftpPasswordPrompt = "SFTP Password (masked input)"
+            SftpRemoteDirectoryPrompt = "Remote Directory (e.g. /web/app_folder)"
+            SftpBaseUrlPrompt = "Base HTTP URL (e.g. https://www.mydomain.com)"
+            PasswordSaved = "[OK] Password encrypted via DPAPI and saved."
+            GitHubAction = "GitHub"
+            ProjectTypeTitle = "SELECT PROJECT TYPE"
+            ExpoProjectType = "Expo (Android / iOS App)"
+            NodeProjectType = "Node.js (Web / API)"
+            ProjectMenuTitle = "PROJECT: {0}"
+            PackageMenuTitle = "PACKAGES ({0})"
+            RestoreProjectName = "Project Name"
+            RestoreFailed = "[ERROR] {0}"
+            ProductionBuildTitle = "=== PRODUCTION AAB BUILD (GOOGLE PLAY) ==="
+            VersionCodeUpdated = "[SYSTEM] Android versionCode incremented: {0} -> {1}"
+            VersionCodeUpdateFailed = "[WARNING] Could not increment versionCode: {0}"
+            InitTemplate = "[INIT] Created default template file .templates/expo/app.json"
+            InitIcon = "[INIT] Created valid fallback PNG image (64x64): {0}.png"
+            RepositoryLabel = "Repository"
+            NotepadMissing = "Notepad++ is not installed in default paths!"
+            SftpNotConfigured = "[WARNING] SFTP is not configured in Settings! Skipping deployment."
+            SftpDeployTitle = "=== DEPLOYING TO SFTP SERVER ==="
+            SftpUploadingApk = "[1/2] Uploading APK: {0} ..."
+            SftpApkUploaded = "[OK] APK uploaded successfully."
+            SftpUploadFailed = "[ERROR] Failed to upload APK (code {0})."
+            SftpUploadingVersion = "[2/2] Uploading version.json ..."
+            SftpVersionUploaded = "[OK] version.json uploaded successfully."
+            SftpDeployComplete = "[SUCCESS] Deployment complete! Remote update URL: {0}"
+            SftpVersionUploadFailed = "[ERROR] Failed to upload version.json (code {0})."
+            UpdateBuilderTitle = "=== UPDATING BUILDER FROM GITHUB ==="
+            UpdateBuilderSuccess = "[OK] Builder.ps1 was updated successfully!"
+            UpdateBuilderRestart = "[INFO] Restarting Builder with the new version..."
+            UpdateBuilderFailed = "[ERROR] Failed to download the update from GitHub:"
+            WizardPathError = "[ERROR] The Builder directory could not be verified in PATH. The setup wizard cannot continue."
+            WizardWingetMissing = "[ERROR] 'winget' is not installed or available in PATH!"
+            WizardWingetInstall = "Install 'App Installer' from the Microsoft Store or install packages manually."
+            ApkBundleSaved = "[SUCCESS] AAB successfully saved to: {0}"
+            CreatingAutoBackup = "Creating automatic backup of the updated production state..."
+            ProductionBuildFailed = "[ERROR] Production AAB build failed!"
+            CacheStopProcesses = "[1/6] Stopping running Node and Java processes..."
+            CacheCleanGradle = "[2/6] Cleaning Gradle build files (android/.gradle & android/app/build)..."
+            CacheSkipGradle = "[2/6] Android folder not prebuilt yet, skipping Gradle clean."
+            CacheClearExpo = "[3/6] Clearing Metro Bundler & Expo caches..."
+            CacheCleanNpm = "[4/6] Cleaning NPM / Watchman cache..."
+            CacheCleanNode = "[5/6] Cleaning node_modules/.cache..."
+            CacheNodeClean = "[5/6] node_modules/.cache is already clean."
+            CacheVerify = "[6/6] Verifying project integrity..."
         }
         CZ = @{
             SelectProject = "VÝBĚR PROJEKTU"
@@ -313,6 +401,19 @@ function Get-Text {
             TargetPath    = "Cílová složka APK"
             Back          = "<-- ZPĚT DO MENU"
             PressKey      = "Stiskni libovolnou klávesu..."
+            NickPrompt    = "Přezdívka"
+            NickSetupTitle = "NASTAVENÍ JMÉNA VÝVOJÁŘE"
+            NickSetupPrompt = "Zadej jméno vývojáře / přezdívku (např. BestDeveloper):"
+            LanguagePrompt = "Vyber jazyk [výchozí: 1]"
+            LanguageTitle = "VÝBĚR JAZYKA"
+            LanguageEnglish = "English (EN)"
+            LanguageGerman  = "Deutsch (DE)"
+            LanguageCzech   = "Čeština (CZ)"
+            MenuInstructions = "ŠIPKAMI NAHORU/DOLŮ, čísly (1-{0}) nebo Enter vyber položku:`n"
+            SelectIndex   = "Zadej číslo položky"
+            NotSet        = "[NASTAVENO NENÍ]"
+            SftpSettings  = "[F] NASTAVENÍ NASAZENÍ PŘES SFTP"
+            WizardSettings = "[I] PRŮVODCE INSTALACÍ (STAV SYSTÉMU)"
 
             # GitHub & Git Clone
             ActGitClone      = "[G] Klonovat projekt z GitHubu"
@@ -324,6 +425,13 @@ function Get-Text {
             CloneSuccess     = "[HOTOVO] Projekt byl úspěšně naklonován a připraven!"
             CloneFail        = "[CHYBA] Klonování selhalo. Zkontroluj práva a název repozitáře."
             FolderExistsErr  = "[CHYBA] Složka již existuje:"
+            GitHubMenuTitle  = "NASAZENÍ PŘES GITHUB"
+            GitInit          = "Inicializovat Git"
+            GitRemoteAdd     = "Přidat vzdálený repozitář Git"
+            GitStatus        = "Stav Gitu"
+            GitPush          = "Odeslat změny (push)"
+            GitPull          = "Stáhnout změny (pull)"
+            GitRemotePrompt  = "Zadej USER/repo.git (např. BaboonCZ/local-android-builder)"
             
             Act1 = "Otevřít nastavené soubory v Notepad++"
             Act2 = "Instalovat Expo/NPM balíčky"
@@ -343,6 +451,18 @@ function Get-Text {
             NotInstalled = "[ NENAINSTALOVÁNO ]"
             MissingMod = "[ CHYBÍ MODUL ]"
             BadVer = "[ CHYBÍ NEBO ŠPATNÁ VERZE! ]"
+            UpdateNeeded = "-> JE K DISPOZICI AKTUALIZACE (v{0})"
+            StatusOk = "[ V POŘÁDKU: {0} ]"
+            WizardNode = "Node.js:"
+            WizardJava = "OpenJDK 17:"
+            WizardAndroidStudio = "Android Studio:"
+            WizardNotepad = "Notepad++:"
+            WizardVSCode = "Editor VS Code:"
+            WizardContinue = "VS Code - Continue AI:"
+            WizardGit = "Git (GitHub):"
+            WizardSdk = "Android SDK:"
+            WizardJavaHome = "JAVA_HOME:"
+            WizardAndroidHome = "ANDROID_HOME:"
             RunAutoInstall = "[>>>] SPUSTIT AUTOMATICKOU INSTALACI CHYBĚJÍCÍCH APLIKACÍ [<<<]"
             RunAutoEnv = "[A] AUTOMATICKY KONFIGUROVAT PROSTŘEDÍ WINDOWS (JAVA_HOME & ANDROID_HOME)"
             WizBack = "<-- ZPĚT DO NASTAVENÍ"
@@ -383,6 +503,62 @@ function Get-Text {
             RestOverwrite = "Chceš existující složku přepsat/aktualizovat? (A/N)"
             RestSuccess = "[HOTOVO] Projekt byl úspěšně obnoven!"
             SFTPupload = "Nahrávat na SFTP"
+            SftpMenuTitle = "NASTAVENÍ NASAZENÍ PŘES SFTP"
+            SftpHost = "SFTP hostitel"
+            SftpPort = "SFTP port"
+            SftpUser = "SFTP uživatel"
+            SftpPassword = "SFTP heslo"
+            SftpRemoteDirectory = "Vzdálená složka"
+            SftpBaseUrl = "Základní HTTP URL"
+            SftpHostPrompt = "SFTP hostitel (např. sftp.webhosting.com)"
+            SftpPortPrompt = "SFTP port [výchozí: 22]"
+            SftpUserPrompt = "SFTP uživatel"
+            SftpPasswordPrompt = "SFTP heslo (zadání se skryje)"
+            SftpRemoteDirectoryPrompt = "Vzdálená složka (např. /web/app_folder)"
+            SftpBaseUrlPrompt = "Základní HTTP URL (např. https://www.mydomain.com)"
+            PasswordSaved = "[OK] Heslo bylo zašifrováno přes DPAPI a uloženo."
+            GitHubAction = "GitHub"
+            ProjectTypeTitle = "VYBER TYP PROJEKTU"
+            ExpoProjectType = "Expo (aplikace pro Android / iOS)"
+            NodeProjectType = "Node.js (web / API)"
+            ProjectMenuTitle = "PROJEKT: {0}"
+            PackageMenuTitle = "BALÍČKY ({0})"
+            RestoreProjectName = "Název projektu"
+            RestoreFailed = "[CHYBA] {0}"
+            ProductionBuildTitle = "=== PRODUKČNÍ SESTAVENÍ AAB (GOOGLE PLAY) ==="
+            VersionCodeUpdated = "[SYSTÉM] Android versionCode zvýšen: {0} -> {1}"
+            VersionCodeUpdateFailed = "[VAROVÁNÍ] versionCode se nepodařilo zvýšit: {0}"
+            InitTemplate = "[INIT] Vytvořen výchozí vzorový soubor .templates/expo/app.json"
+            InitIcon = "[INIT] Vytvořen platný záložní PNG obrázek (64x64): {0}.png"
+            RepositoryLabel = "Repozitář"
+            NotepadMissing = "Notepad++ není nainstalován v žádné z výchozích cest!"
+            SftpNotConfigured = "[VAROVÁNÍ] SFTP není nastaveno. Nasazení se přeskočí."
+            SftpDeployTitle = "=== NASAZENÍ NA SFTP SERVER ==="
+            SftpUploadingApk = "[1/2] Nahrávám APK: {0} ..."
+            SftpApkUploaded = "[OK] APK bylo úspěšně nahráno."
+            SftpUploadFailed = "[CHYBA] Nahrání APK selhalo (kód {0})."
+            SftpUploadingVersion = "[2/2] Nahrávám version.json ..."
+            SftpVersionUploaded = "[OK] Soubor version.json byl úspěšně nahrán."
+            SftpDeployComplete = "[HOTOVO] Nasazení dokončeno! Vzdálená URL aktualizace: {0}"
+            SftpVersionUploadFailed = "[CHYBA] Nahrání version.json selhalo (kód {0})."
+            UpdateBuilderTitle = "=== AKTUALIZUJI BUILDER Z GITHUBU ==="
+            UpdateBuilderSuccess = "[OK] Builder.ps1 byl úspěšně aktualizován!"
+            UpdateBuilderRestart = "[INFO] Restartuji Builder s novou verzí..."
+            UpdateBuilderFailed = "[CHYBA] Stažení aktualizace z GitHubu selhalo:"
+            WizardPathError = "[CHYBA] Cestu Builderu se nepodařilo ověřit v PATH. Průvodce instalací nemůže pokračovat."
+            WizardWingetMissing = "[CHYBA] Nástroj 'winget' není nainstalován nebo dostupný v PATH!"
+            WizardWingetInstall = "Nainstaluj 'App Installer' z Microsoft Store nebo balíčky nainstaluj ručně."
+            ApkBundleSaved = "[HOTOVO] AAB bylo úspěšně uloženo do: {0}"
+            CreatingAutoBackup = "Vytvářím automatickou zálohu aktualizovaného produkčního stavu..."
+            ProductionBuildFailed = "[CHYBA] Sestavení produkčního AAB selhalo!"
+            CacheStopProcesses = "[1/6] Ukončuji běžící procesy Node a Java..."
+            CacheCleanGradle = "[2/6] Čistím soubory Gradle buildu (android/.gradle a android/app/build)..."
+            CacheSkipGradle = "[2/6] Složka Android zatím není vytvořena, čištění Gradle se přeskočí."
+            CacheClearExpo = "[3/6] Mažu mezipaměť Metro Bundleru a Expo..."
+            CacheCleanNpm = "[4/6] Čistím mezipaměť NPM / Watchman..."
+            CacheCleanNode = "[5/6] Mažu node_modules/.cache..."
+            CacheNodeClean = "[5/6] node_modules/.cache je již prázdná."
+            CacheVerify = "[6/6] Ověřuji integritu projektu..."
         }
         DE = @{
             SelectProject = "PROJEKT AUSWÄHLEN"
@@ -400,6 +576,19 @@ function Get-Text {
             TargetPath    = "APK-Zielpfad"
             Back          = "<-- ZURÜCK ZUM MENÜ"
             PressKey      = "Drücken Sie eine beliebige Taste..."
+            NickPrompt    = "Nickname"
+            NickSetupTitle = "ENTWICKLER-NICKNAME EINRICHTEN"
+            NickSetupPrompt = "Geben Sie Ihren Entwickler-Nickname ein (z. B. BestDeveloper):"
+            LanguagePrompt = "Sprache auswählen [Standard: 1]"
+            LanguageTitle = "SPRACHE AUSWÄHLEN"
+            LanguageEnglish = "English (EN)"
+            LanguageGerman  = "Deutsch (DE)"
+            LanguageCzech   = "Čeština (CZ)"
+            MenuInstructions = "Mit OBEN/UNTEN, Nummern (1-{0}) oder Enter auswählen:`n"
+            SelectIndex   = "Index auswählen"
+            NotSet        = "[NICHT EINGESTELLT]"
+            SftpSettings  = "[F] SFTP-DEPLOYMENT KONFIGURIEREN"
+            WizardSettings = "[I] SETUP-ASSISTENT (SYSTEMSTATUS)"
 
             # GitHub & Git Clone
             ActGitClone      = "[G] Projekt von GitHub klonen"
@@ -411,6 +600,13 @@ function Get-Text {
             CloneSuccess     = "[FERTIG] Projekt erfolgreich geklont und eingerichtet!"
             CloneFail        = "[FEHLER] Klonen fehlgeschlagen. Prüfen Sie Rechte und Repository-Name."
             FolderExistsErr  = "[FEHLER] Ordner existiert bereits:"
+            GitHubMenuTitle  = "GITHUB-DEPLOYMENT"
+            GitInit          = "Git initialisieren"
+            GitRemoteAdd     = "Git-Remote hinzufügen"
+            GitStatus        = "Git-Status"
+            GitPush          = "Änderungen übertragen (push)"
+            GitPull          = "Änderungen abrufen (pull)"
+            GitRemotePrompt  = "USER/repo.git eingeben (z. B. BaboonCZ/local-android-builder)"
             
             Act1 = "Konfigurierte Dateien in Notepad++ öffnen"
             Act2 = "Expo/NPM Pakete installieren"
@@ -433,6 +629,18 @@ function Get-Text {
             NotInstalled = "[ NICHT INSTALLIERT ]"
             MissingMod = "[ FEHLENDES MODUL ]"
             BadVer = "[ FEHLT ODER FALSCHE VERSION! ]"
+            UpdateNeeded = "-> UPDATE VERFÜGBAR (v{0})"
+            StatusOk = "[ OK: {0} ]"
+            WizardNode = "Node.js:"
+            WizardJava = "OpenJDK 17:"
+            WizardAndroidStudio = "Android Studio:"
+            WizardNotepad = "Notepad++:"
+            WizardVSCode = "VS-Code-Editor:"
+            WizardContinue = "VS Code - Continue AI:"
+            WizardGit = "Git (GitHub):"
+            WizardSdk = "Android-SDK:"
+            WizardJavaHome = "JAVA_HOME:"
+            WizardAndroidHome = "ANDROID_HOME:"
             RunAutoInstall = "[>>>] AUTOMATISCHE INSTALLATION FEHLENDER APPS STARTEN [<<<]"
             RunAutoEnv = "[A] WINDOWS-UMGEBUNG AUTOMATISCH KONFIGURIEREN (JAVA_HOME & ANDROID_HOME)"
             WizBack = "<-- ZURÜCK ZU EINSTELLUNGEN"
@@ -470,6 +678,62 @@ function Get-Text {
             RestOverwrite = "Möchten Sie den vorhandenen Ordner überschreiben/aktualisieren? (J/N)"
             RestSuccess = "[FERTIG] Projekt erfolgreich wiederhergestellt!"
             SFTPupload = "Auf SFTP hochladen"
+            SftpMenuTitle = "SFTP-DEPLOYMENT KONFIGURIEREN"
+            SftpHost = "SFTP-Host"
+            SftpPort = "SFTP-Port"
+            SftpUser = "SFTP-Benutzer"
+            SftpPassword = "SFTP-Passwort"
+            SftpRemoteDirectory = "Remote-Verzeichnis"
+            SftpBaseUrl = "Basis-HTTP-URL"
+            SftpHostPrompt = "SFTP-Host (z. B. sftp.webhosting.com)"
+            SftpPortPrompt = "SFTP-Port [Standard: 22]"
+            SftpUserPrompt = "SFTP-Benutzer"
+            SftpPasswordPrompt = "SFTP-Passwort (Eingabe wird maskiert)"
+            SftpRemoteDirectoryPrompt = "Remote-Verzeichnis (z. B. /web/app_folder)"
+            SftpBaseUrlPrompt = "Basis-HTTP-URL (z. B. https://www.mydomain.com)"
+            PasswordSaved = "[OK] Passwort wurde mit DPAPI verschlüsselt und gespeichert."
+            GitHubAction = "GitHub"
+            ProjectTypeTitle = "PROJEKTTYP AUSWÄHLEN"
+            ExpoProjectType = "Expo (Android-/iOS-App)"
+            NodeProjectType = "Node.js (Web / API)"
+            ProjectMenuTitle = "PROJEKT: {0}"
+            PackageMenuTitle = "PAKETE ({0})"
+            RestoreProjectName = "Projektname"
+            RestoreFailed = "[FEHLER] {0}"
+            ProductionBuildTitle = "=== PRODUKTIONS-AAB ERSTELLEN (GOOGLE PLAY) ==="
+            VersionCodeUpdated = "[SYSTEM] Android-versionCode erhöht: {0} -> {1}"
+            VersionCodeUpdateFailed = "[WARNUNG] versionCode konnte nicht erhöht werden: {0}"
+            InitTemplate = "[INIT] Standardvorlage .templates/expo/app.json erstellt"
+            InitIcon = "[INIT] Gültiges Ersatz-PNG-Bild erstellt (64x64): {0}.png"
+            RepositoryLabel = "Repository"
+            NotepadMissing = "Notepad++ ist nicht in den Standardpfaden installiert!"
+            SftpNotConfigured = "[WARNUNG] SFTP ist nicht konfiguriert. Deployment wird übersprungen."
+            SftpDeployTitle = "=== DEPLOYMENT AUF SFTP-SERVER ==="
+            SftpUploadingApk = "[1/2] APK wird hochgeladen: {0} ..."
+            SftpApkUploaded = "[OK] APK erfolgreich hochgeladen."
+            SftpUploadFailed = "[FEHLER] APK-Upload fehlgeschlagen (Code {0})."
+            SftpUploadingVersion = "[2/2] version.json wird hochgeladen ..."
+            SftpVersionUploaded = "[OK] version.json erfolgreich hochgeladen."
+            SftpDeployComplete = "[ERFOLG] Deployment abgeschlossen! Remote-Update-URL: {0}"
+            SftpVersionUploadFailed = "[FEHLER] Upload von version.json fehlgeschlagen (Code {0})."
+            UpdateBuilderTitle = "=== BUILDER WIRD VON GITHUB AKTUALISIERT ==="
+            UpdateBuilderSuccess = "[OK] Builder.ps1 wurde erfolgreich aktualisiert!"
+            UpdateBuilderRestart = "[INFO] Builder wird mit der neuen Version neu gestartet..."
+            UpdateBuilderFailed = "[FEHLER] Download des Updates von GitHub fehlgeschlagen:"
+            WizardPathError = "[FEHLER] Das Builder-Verzeichnis konnte nicht in PATH bestätigt werden. Der Setup-Assistent kann nicht fortfahren."
+            WizardWingetMissing = "[FEHLER] 'winget' ist nicht installiert oder nicht über PATH verfügbar!"
+            WizardWingetInstall = "Installieren Sie 'App Installer' aus dem Microsoft Store oder installieren Sie die Pakete manuell."
+            ApkBundleSaved = "[ERFOLG] AAB erfolgreich gespeichert unter: {0}"
+            CreatingAutoBackup = "Automatisches Backup des aktualisierten Produktionsstands wird erstellt..."
+            ProductionBuildFailed = "[FEHLER] Erstellung des Produktions-AAB fehlgeschlagen!"
+            CacheStopProcesses = "[1/6] Laufende Node- und Java-Prozesse werden beendet..."
+            CacheCleanGradle = "[2/6] Gradle-Builddateien werden bereinigt (android/.gradle & android/app/build)..."
+            CacheSkipGradle = "[2/6] Android-Ordner ist noch nicht erstellt; Gradle-Bereinigung wird übersprungen."
+            CacheClearExpo = "[3/6] Metro-Bundler- und Expo-Caches werden geleert..."
+            CacheCleanNpm = "[4/6] NPM-/Watchman-Cache wird bereinigt..."
+            CacheCleanNode = "[5/6] node_modules/.cache wird bereinigt..."
+            CacheNodeClean = "[5/6] node_modules/.cache ist bereits sauber."
+            CacheVerify = "[6/6] Projektintegrität wird überprüft..."
         }
     }
 
@@ -511,13 +775,13 @@ function Get-Config {
     if ([string]::IsNullOrWhiteSpace($config.Language)) {
         Clear-Host
         Write-Host "========================================" -ForegroundColor Cyan
-        Write-Host "  LANGUAGE SELECTION" -ForegroundColor Yellow
+        Write-Host "  LANGUAGE / SPRACHE / JAZYK" -ForegroundColor Yellow
         Write-Host "========================================" -ForegroundColor Cyan
         Write-Host "1) English (EN)"
         Write-Host "2) Deutsch (DE)"
         Write-Host "3) Čeština (CZ)`n"
         
-        $langChoice = Read-Host "Select language [Default: 1]"
+        $langChoice = Read-Host (Get-Text 'LanguagePrompt' $config.Language)
         switch ($langChoice.Trim()) {
             "3" { $config.Language = "CZ" }
             "2" { $config.Language = "DE" }
@@ -530,21 +794,11 @@ function Get-Config {
     if ([string]::IsNullOrWhiteSpace($config.Nick)) {
         Clear-Host
         Write-Host "========================================" -ForegroundColor Cyan
-        $titleText = switch ($config.Language) {
-            "CZ" { "NASTAVENÍ JMÉNA VÝVOJÁŘE" }
-            "DE" { "ENTWICKLER-NICKNAME SETUP" }
-            default { "DEVELOPER NICKNAME SETUP" }
-        }
-        $promptMsg = switch ($config.Language) {
-            "CZ" { "Zadej jméno vývojáře / Nick (např. BestDeveloper):" }
-            "DE" { "Geben Sie Ihren Entwickler-Nickname ein (z. B. BestDeveloper):" }
-            default { "Enter developer nickname (e.g. BestDeveloper):" }
-        }
-        Write-Host "  $titleText" -ForegroundColor Yellow
+        Write-Host "  $(Get-Text 'NickSetupTitle' $config.Language)" -ForegroundColor Yellow
         Write-Host "========================================" -ForegroundColor Cyan
-        Write-Host "$promptMsg`n" -ForegroundColor Gray
+        Write-Host "$(Get-Text 'NickSetupPrompt' $config.Language)`n" -ForegroundColor Gray
         
-        $inputNick = Read-Host "Nick"
+        $inputNick = Read-Host (Get-Text 'NickPrompt' $config.Language)
         if ([string]::IsNullOrWhiteSpace($inputNick)) {
             $config.Nick = "Dev"
         } else {
@@ -556,6 +810,7 @@ function Get-Config {
     if ($needsSave) {
         Save-Config $config
     }
+    $global:currentLanguage = $config.Language
     return $config
 }
 
@@ -583,7 +838,7 @@ function Publish-ApkToSftp {
     )
     $cfg = Get-Config
     if ([string]::IsNullOrWhiteSpace($cfg.SftpHost) -or [string]::IsNullOrWhiteSpace($cfg.SftpUser)) {
-        Write-Host "`n[WARNING] SFTP is not configured in Settings! Skipping deployment." -ForegroundColor Yellow
+        Write-Host "`n$(Get-Text 'SftpNotConfigured' $cfg.Language)" -ForegroundColor Yellow
         return
     }
 
@@ -623,27 +878,27 @@ function Publish-ApkToSftp {
     [System.IO.File]::WriteAllText($tempVersionPath, $versionJson, (New-Object System.Text.UTF8Encoding $false))
 
     # 2. Upload APK a VERSION.JSON přes nativní curl.exe
-    Write-Host "`n=== DEPLOYING TO SFTP SERVER ===" -ForegroundColor Cyan
+    Write-Host "`n$(Get-Text 'SftpDeployTitle' $cfg.Language)" -ForegroundColor Cyan
     $baseRemoteUrl = "sftp://$($cfg.SftpHost):$($cfg.SftpPort)$($cfg.SftpRemoteDir.TrimEnd('/'))"
 
-    Write-Host "[1/2] Uploading APK: $apkFileName ..." -ForegroundColor Yellow
+    Write-Host ((Get-Text 'SftpUploadingApk' $cfg.Language) -f $apkFileName) -ForegroundColor Yellow
     & curl.exe -u "$($cfg.SftpUser):$pass" -T "$ApkFilePath" "$baseRemoteUrl/$apkFileName" --insecure -s
 
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "[OK] APK uploaded successfully." -ForegroundColor Green
+        Write-Host (Get-Text 'SftpApkUploaded' $cfg.Language) -ForegroundColor Green
     } else {
-        Write-Host "[ERROR] Failed to upload APK (code $LASTEXITCODE)." -ForegroundColor Red
+        Write-Host ((Get-Text 'SftpUploadFailed' $cfg.Language) -f $LASTEXITCODE) -ForegroundColor Red
         return
     }
 
-    Write-Host "[2/2] Uploading version.json ..." -ForegroundColor Yellow
+    Write-Host (Get-Text 'SftpUploadingVersion' $cfg.Language) -ForegroundColor Yellow
     & curl.exe -u "$($cfg.SftpUser):$pass" -T "$tempVersionPath" "$baseRemoteUrl/version.json" --insecure -s
 
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "[OK] version.json uploaded successfully." -ForegroundColor Green
-        Write-Host "`n[SUCCESS] Deployment complete! Remote update URL: $remoteApkUrl" -ForegroundColor Green
+        Write-Host (Get-Text 'SftpVersionUploaded' $cfg.Language) -ForegroundColor Green
+        Write-Host "`n$((Get-Text 'SftpDeployComplete' $cfg.Language) -f $remoteApkUrl)" -ForegroundColor Green
     } else {
-        Write-Host "[ERROR] Failed to upload version.json (code $LASTEXITCODE)." -ForegroundColor Red
+        Write-Host ((Get-Text 'SftpVersionUploadFailed' $cfg.Language) -f $LASTEXITCODE) -ForegroundColor Red
     }
 
     Remove-Item $tempVersionPath -Force -ErrorAction SilentlyContinue
@@ -654,24 +909,24 @@ function Show-SetupSFTP {
         $cfg = Get-Config
         $L = $cfg.Language
         
-        $passStatus = if ($cfg.SftpPassHash) { "*****" } else { "[NOT SET]" }
-        $hostVal    = if ($cfg.SftpHost) { $cfg.SftpHost } else { "[NOT SET]" }
+        $passStatus = if ($cfg.SftpPassHash) { "*****" } else { Get-Text 'NotSet' $L }
+        $hostVal    = if ($cfg.SftpHost) { $cfg.SftpHost } else { Get-Text 'NotSet' $L }
         $portVal    = if ($cfg.SftpPort) { $cfg.SftpPort } else { "22" }
-        $userVal    = if ($cfg.SftpUser) { $cfg.SftpUser } else { "[NOT SET]" }
-        $dirVal     = if ($cfg.SftpRemoteDir) { $cfg.SftpRemoteDir } else { "[NOT SET]" }
-        $urlVal     = if ($cfg.SftpBaseUrl) { $cfg.SftpBaseUrl } else { "[NOT SET]" }
+        $userVal    = if ($cfg.SftpUser) { $cfg.SftpUser } else { Get-Text 'NotSet' $L }
+        $dirVal     = if ($cfg.SftpRemoteDir) { $cfg.SftpRemoteDir } else { Get-Text 'NotSet' $L }
+        $urlVal     = if ($cfg.SftpBaseUrl) { $cfg.SftpBaseUrl } else { Get-Text 'NotSet' $L }
 
         $opts = @(
-            "SFTP Host:        $hostVal",
-            "SFTP Port:        $portVal",
-            "SFTP User:        $userVal",
-            "SFTP Password:    $passStatus",
-            "Remote Directory: $dirVal",
-            "Base HTTP URL:    $urlVal",
+            ("{0,-18} {1}" -f ((Get-Text 'SftpHost' $L) + ':'), $hostVal),
+            ("{0,-18} {1}" -f ((Get-Text 'SftpPort' $L) + ':'), $portVal),
+            ("{0,-18} {1}" -f ((Get-Text 'SftpUser' $L) + ':'), $userVal),
+            ("{0,-18} {1}" -f ((Get-Text 'SftpPassword' $L) + ':'), $passStatus),
+            ("{0,-18} {1}" -f ((Get-Text 'SftpRemoteDirectory' $L) + ':'), $dirVal),
+            ("{0,-18} {1}" -f ((Get-Text 'SftpBaseUrl' $L) + ':'), $urlVal),
             "$(Get-Text 'Back' $L)"
         )
 
-        $idx = Show-Menu -Title "SFTP DEPLOYMENT CONFIGURATION" -Options $opts -InitialIndex $global:sftpMenuIndex
+        $idx = Show-Menu -Title (Get-Text 'SftpMenuTitle' $L) -Options $opts -InitialIndex $global:sftpMenuIndex
         if ($idx -eq -1 -or $idx -eq ($opts.Count - 1)) { return }
 
         # Uložíme aktuálně zvolený index, aby kurzor zůstal na stejném místě
@@ -680,28 +935,28 @@ function Show-SetupSFTP {
         Clear-Host
         switch ($idx) {
             0 {
-                $inHost = Read-Host "SFTP Host (e.g. sftp.webhosting.com)"
+                $inHost = Read-Host (Get-Text 'SftpHostPrompt' $L)
                 if (-not [string]::IsNullOrWhiteSpace($inHost)) {
                     $cfg.SftpHost = $inHost.Trim()
                     Save-Config $cfg
                 }
             }
             1 {
-                $inPort = Read-Host "SFTP Port [Default: 22]"
+                $inPort = Read-Host (Get-Text 'SftpPortPrompt' $L)
                 if (-not [string]::IsNullOrWhiteSpace($inPort)) {
                     $cfg.SftpPort = $inPort.Trim()
                     Save-Config $cfg
                 }
             }
             2 {
-                $inUser = Read-Host "SFTP User"
+                $inUser = Read-Host (Get-Text 'SftpUserPrompt' $L)
                 if (-not [string]::IsNullOrWhiteSpace($inUser)) {
                     $cfg.SftpUser = $inUser.Trim()
                     Save-Config $cfg
                 }
             }
             3 {
-                $secPass = Read-Host "SFTP Password (masked input)" -AsSecureString
+                $secPass = Read-Host (Get-Text 'SftpPasswordPrompt' $L) -AsSecureString
                 $bstrPass = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secPass)
                 $plainCheck = [System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($bstrPass)
                 [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstrPass)
@@ -709,19 +964,19 @@ function Show-SetupSFTP {
                 if (-not [string]::IsNullOrWhiteSpace($plainCheck)) {
                     $cfg.SftpPassHash = ConvertFrom-SecureString $secPass
                     Save-Config $cfg
-                    Write-Host "`n[OK] Password encrypted via DPAPI and saved." -ForegroundColor Green
+                    Write-Host "`n$(Get-Text 'PasswordSaved' $L)" -ForegroundColor Green
                     Start-Sleep -Seconds 1
                 }
             }
             4 {
-                $inDir = Read-Host "Remote Directory (e.g. /web/app_folder)"
+                $inDir = Read-Host (Get-Text 'SftpRemoteDirectoryPrompt' $L)
                 if (-not [string]::IsNullOrWhiteSpace($inDir)) {
                     $cfg.SftpRemoteDir = $inDir.Trim()
                     Save-Config $cfg
                 }
             }
             5 {
-                $inUrl = Read-Host "Base HTTP URL (e.g. https://www.mydomain.com)"
+                $inUrl = Read-Host (Get-Text 'SftpBaseUrlPrompt' $L)
                 if (-not [string]::IsNullOrWhiteSpace($inUrl)) {
                     $cfg.SftpBaseUrl = $inUrl.Trim()
                     Save-Config $cfg
@@ -736,15 +991,15 @@ function Show-GitHub {
         $L = $cfg.Language
         
         $opts = @(
-            "Git init",
-            "Git remote add",
-            "Git status",
-            "Git push",
-            "Git pull",
+            (Get-Text 'GitInit' $L),
+            (Get-Text 'GitRemoteAdd' $L),
+            (Get-Text 'GitStatus' $L),
+            (Get-Text 'GitPush' $L),
+            (Get-Text 'GitPull' $L),
             "$(Get-Text 'Back' $L)"
         )
 
-        $idx = Show-Menu -Title "GitHub DEPLOYMENT" -Options $opts -InitialIndex $global:gitMenuIndex
+        $idx = Show-Menu -Title (Get-Text 'GitHubMenuTitle' $L) -Options $opts -InitialIndex $global:gitMenuIndex
         
         # Opuštění menu (Esc nebo volba Zpět)
         if ($idx -eq -1 -or $idx -eq ($opts.Count - 1)) { 
@@ -761,7 +1016,7 @@ function Show-GitHub {
                 $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
             }
             1 {
-                $inDeposit = Read-Host "Set USER/repo.git (e.g. BaboonCZ/local-android-builder)"
+                $inDeposit = Read-Host (Get-Text 'GitRemotePrompt' $L)
                 if (-not [string]::IsNullOrWhiteSpace($inDeposit)) {
                     $Deposit = $inDeposit.Trim()
                     git remote add origin "https://github.com/$Deposit"
@@ -776,7 +1031,7 @@ function Show-GitHub {
             }
             3 {
                 git add .
-                $msg = Read-Host "Enter commit message (or press Enter for 'Auto-sync')"
+                $msg = Read-Host (Get-Text 'EnterCommitMsg' $L)
                 if ([string]::IsNullOrWhiteSpace($msg)) {$msg = "Auto-sync" }
                 
                 git commit -m "$msg"
@@ -864,7 +1119,7 @@ if (-not (Test-Path $templateJson)) {
 }
 "@
     [System.IO.File]::WriteAllText($templateJson, $defaultAppJson, (New-Object System.Text.UTF8Encoding $false))
-    Write-Host "[INIT] Vytvořen základní vzorový soubor .templates/expo/app.json" -ForegroundColor Yellow
+    Write-Host "$(Get-Text 'InitTemplate' $currentConfig.Language)" -ForegroundColor Yellow
 }
 
 if (-not (Test-Path $iconSource)) {
@@ -876,7 +1131,7 @@ if (-not (Test-Path $iconSource)) {
         $gfx.Dispose()
         $bmp.Save($iconSource, [System.Drawing.Imaging.ImageFormat]::Png)
         $bmp.Dispose()
-        Write-Host "[INIT] Vytvořen platný záložní PNG soubor (64x64 px): $activeNick.png" -ForegroundColor Yellow
+        Write-Host ((Get-Text 'InitIcon' $currentConfig.Language) -f $activeNick) -ForegroundColor Yellow
     } catch {
         [System.IO.File]::WriteAllText($iconSource, "DUMMY PNG")
     }
@@ -934,7 +1189,7 @@ function Open-InNotepadPlusPlus {
     $exe = $nppPaths | Where-Object { Test-Path $_ } | Select-Object -First 1
 
     if (-not $exe) {
-        Write-Host "`nNotepad++ is not installed in default paths!" -ForegroundColor Red
+        Write-Host "`n$(Get-Text 'NotepadMissing' $Lang)" -ForegroundColor Red
         return
     }
 
@@ -954,8 +1209,8 @@ function Update-SelfFromGitHub {
     $cfg = Get-Config
     $L = $cfg.Language
 
-    Write-Host "`n=== UPDATING BUILDER FROM GITHUB ===" -ForegroundColor Cyan
-    Write-Host "Repository: BaboonCZ/local-android-builder`n" -ForegroundColor Gray
+    Write-Host "`n$(Get-Text 'UpdateBuilderTitle' $L)" -ForegroundColor Cyan
+    Write-Host "$(Get-Text 'RepositoryLabel' $L): BaboonCZ/local-android-builder`n" -ForegroundColor Gray
 
     $runningScriptPath = $PSCommandPath
     if ([string]::IsNullOrWhiteSpace($runningScriptPath)) { $runningScriptPath = $selfScriptPath }
@@ -972,8 +1227,8 @@ function Update-SelfFromGitHub {
             Copy-Item -Path $tempFile -Destination $runningScriptPath -Force
             Remove-Item $tempFile -Force -ErrorAction SilentlyContinue
 
-            Write-Host "[OK] Builder.ps1 byl úspěšně aktualizován!" -ForegroundColor Green
-            Write-Host "[INFO] Restartuji Builder s novou verzí..." -ForegroundColor Yellow
+            Write-Host "$(Get-Text 'UpdateBuilderSuccess' $L)" -ForegroundColor Green
+            Write-Host "$(Get-Text 'UpdateBuilderRestart' $L)" -ForegroundColor Yellow
             Start-Sleep -Seconds 1
 
             # 3. Otevření nového okna s novou verzí a ukončení starého procesu
@@ -982,7 +1237,7 @@ function Update-SelfFromGitHub {
         }
     }
     catch {
-        Write-Host "[ERROR] Selhalo stažení aktualizace z GitHubu: $_" -ForegroundColor Red
+        Write-Host "$(Get-Text 'UpdateBuilderFailed' $L) $_" -ForegroundColor Red
         Write-Host "`n$(Get-Text 'PressKey' $L)" -ForegroundColor Gray
         $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
     }
@@ -1004,7 +1259,7 @@ function Show-Menu {
             Write-Host "========================================" -ForegroundColor Cyan
             Write-Host "  $Title" -ForegroundColor Yellow
             Write-Host "========================================" -ForegroundColor Cyan
-            Write-Host "UP/DOWN arrows, numbers (1-$($Options.Count)) or Enter to select:`n" -ForegroundColor Gray
+            Write-Host ((Get-Text 'MenuInstructions' $global:currentLanguage) -f $Options.Count) -ForegroundColor Gray
 
             for ($i = 0; $i -lt $Options.Count; $i++) {
                 if ($i -eq $selectedIndex) {
@@ -1057,7 +1312,7 @@ function Show-Menu {
             Write-Host "  $($i + 1)) $($Options[$i])"
         }
         Write-Host ""
-        $inputVal = Read-Host "Select index"
+        $inputVal = Read-Host (Get-Text 'SelectIndex' $global:currentLanguage)
         if ([string]::IsNullOrWhiteSpace($inputVal)) { return -1 }
         $parsed = 0
         if ([int]::TryParse($inputVal.Trim(), [ref]$parsed)) {
@@ -1095,15 +1350,15 @@ function Show-SetupWizard {
     $pathRegistered = Register-InWindowsPath -DirToRegister $scriptDir
     Update-SessionPath
     if (-not $pathRegistered -or -not (Test-PathContainsDirectory -PathValue $env:Path -Directory $scriptDir)) {
-        Write-Host "`n[ERROR] The Builder directory could not be verified in PATH. The setup wizard cannot continue." -ForegroundColor Red
+        Write-Host "`n$(Get-Text 'WizardPathError' $L)" -ForegroundColor Red
         Write-Host "`n$(Get-Text 'PressKey' $L)" -ForegroundColor Gray
         $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         return
     }
 
     if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
-        Write-Host "`n[ERROR] The 'winget' tool is not installed or available in PATH on this system!" -ForegroundColor Red
-        Write-Host "Please install 'App Installer' from the Microsoft Store or install the packages manually." -ForegroundColor Yellow
+        Write-Host "`n$(Get-Text 'WizardWingetMissing' $L)" -ForegroundColor Red
+        Write-Host "$(Get-Text 'WizardWingetInstall' $L)" -ForegroundColor Yellow
         Write-Host "`n$(Get-Text 'PressKey' $L)" -ForegroundColor Gray
         $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         return
@@ -1128,7 +1383,7 @@ function Show-SetupWizard {
             $nodeStatus = if (-not $nodeVer) {
                         $(Get-Text 'NotInstalled' $L)
                     } elseif ($nodeOnline -and $nodeOnline -ne "?" -and $nodeVer.TrimStart('v') -ne $nodeOnline.TrimStart('v')) {
-                        "[ $nodeVer ] -> NEED UPDATE (v$nodeOnline)"
+                        "[ $nodeVer ] $((Get-Text 'UpdateNeeded' $L) -f $nodeOnline)"
                     } else {
                         "[ $nodeVer ]"
                     }
@@ -1145,7 +1400,7 @@ function Show-SetupWizard {
             $gitStatus = if (-not $gitVer) {
                 $(Get-Text 'NotInstalled' $L)
             } elseif ($gitOnline -and $gitOnline -ne "?" -and $gitVer.TrimStart('v') -ne $gitOnline.TrimStart('v')) {
-                "[ $gitVer ] -> NEED UPDATE (v$gitOnline)"
+                "[ $gitVer ] $((Get-Text 'UpdateNeeded' $L) -f $gitOnline)"
             } else {
                 "[ $gitVer ]"
             }
@@ -1157,7 +1412,7 @@ function Show-SetupWizard {
             $javaStatus = if (-not $javaVer) {
                     $(Get-Text 'NotInstalled' $L)
                 } elseif ($jOnlineShort -and $jLocalShort -ne $jOnlineShort) {
-                    "[ $javaVer ] -> NEED UPDATE (v$javaOnline)"
+                    "[ $javaVer ] $((Get-Text 'UpdateNeeded' $L) -f $javaOnline)"
                 } else {
                     "[ $javaVer ]"
                 }
@@ -1188,7 +1443,7 @@ function Show-SetupWizard {
             $asOnlineShort = if ($asOnline -ne "?") { Get-VersionPrefix $asOnline } else { $null }
 
                 if ($asOnlineShort -and $asLocalShort -ne $asOnlineShort) {
-                    "[ v$asFvi ] -> NEED UPDATE (v$asOnline)"
+                    "[ v$asFvi ] $((Get-Text 'UpdateNeeded' $L) -f $asOnline)"
                 } else {
                     "[ v$asFvi ]"
                 }
@@ -1209,7 +1464,7 @@ function Show-SetupWizard {
                 $nppOnlineShort = if ($nppOnline -ne "?") { Get-VersionPrefix $nppOnline } else { $null }
 
                 if ($nppOnlineShort -and $nppLocalShort -ne $nppOnlineShort) {
-                    "[ v$nppFvi ] -> NEED UPDATE (v$nppOnline)"
+                    "[ v$nppFvi ] $((Get-Text 'UpdateNeeded' $L) -f $nppOnline)"
                 } else {
                     "[ v$nppFvi ]"
                 }
@@ -1230,7 +1485,7 @@ function Show-SetupWizard {
                 $codeOnlineShort = if ($codeOnline -ne "?") { Get-VersionPrefix $codeOnline } else { $null }
 
                 if ($codeOnlineShort -and $codeLocalShort -ne $codeOnlineShort) {
-                    "[ v$codeFvi ] -> NEED UPDATE (v$codeOnline)"
+                    "[ v$codeFvi ] $((Get-Text 'UpdateNeeded' $L) -f $codeOnline)"
                 } else {
                     "[ v$codeFvi ]"
                 }
@@ -1250,7 +1505,7 @@ function Show-SetupWizard {
 
             $sdkDefault = "$env:LOCALAPPDATA\Android\Sdk"
             $sdkStatus = if ((Test-Path $sdkDefault) -and (Test-Path (Join-Path $sdkDefault "platform-tools"))) { 
-                "[ OK: $sdkDefault ]" 
+                ((Get-Text 'StatusOk' $L) -f $sdkDefault)
             } else { 
                 $(Get-Text 'NotInstalled' $L)
             }
@@ -1258,27 +1513,27 @@ function Show-SetupWizard {
             $envJava = [System.Environment]::GetEnvironmentVariable("JAVA_HOME", "User")
             if (-not $envJava) {$envJava = $env:JAVA_HOME }
             $javaEnvValid = ($envJava -and (Test-Path $envJava) -and ($envJava -match '17'))
-            $javaEnvStatus = if ($javaEnvValid) { "[ OK: $envJava ]" } else { $(Get-Text 'BadVer' $L) }
+            $javaEnvStatus = if ($javaEnvValid) { (Get-Text 'StatusOk' $L) -f $envJava } else { $(Get-Text 'BadVer' $L) }
 
             $envAndroid = [System.Environment]::GetEnvironmentVariable("ANDROID_HOME", "User")
             if (-not $envAndroid) { $envAndroid = $env:ANDROID_HOME }
             $androidEnvValid = ($envAndroid -and (Test-Path $envAndroid) -and (Test-Path (Join-Path $envAndroid "platform-tools")))
-            $androidEnvStatus = if ($androidEnvValid) { "[ OK: $envAndroid ]" } else { $(Get-Text 'BadVer' $L) }
+            $androidEnvStatus = if ($androidEnvValid) { (Get-Text 'StatusOk' $L) -f $envAndroid } else { $(Get-Text 'BadVer' $L) }
 
             $allAppsInstalled = ($nodeVer -and $javaVer -and $asExe -and $nppExe -and $codeExe -and $hasContinueMod -and (Test-Path $sdkDefault))
             $allEnvValid = ($javaEnvValid -and $androidEnvValid)
 
             $steps = @()
-            $steps += "Node.js:                 $nodeStatus"
-            $steps += "OpenJDK 17:              $javaStatus"
-            $steps += "Android Studio:          $asStatus"
-            $steps += "Notepad++:               $nppStatus"
-            $steps += "VS Code Editor:          $codeStatus"
-            $steps += "VS Code - Continue AI:   $aiStatus"
-            $steps += "Git (GitHub):            $gitStatus"
-            $steps += "Android SDK:             $sdkStatus"
-            $steps += "JAVA_HOME:               $javaEnvStatus"
-            $steps += "ANDROID_HOME:           $androidEnvStatus"
+            $steps += ("{0,-24} {1}" -f (Get-Text 'WizardNode' $L), $nodeStatus)
+            $steps += ("{0,-24} {1}" -f (Get-Text 'WizardJava' $L), $javaStatus)
+            $steps += ("{0,-24} {1}" -f (Get-Text 'WizardAndroidStudio' $L), $asStatus)
+            $steps += ("{0,-24} {1}" -f (Get-Text 'WizardNotepad' $L), $nppStatus)
+            $steps += ("{0,-24} {1}" -f (Get-Text 'WizardVSCode' $L), $codeStatus)
+            $steps += ("{0,-24} {1}" -f (Get-Text 'WizardContinue' $L), $aiStatus)
+            $steps += ("{0,-24} {1}" -f (Get-Text 'WizardGit' $L), $gitStatus)
+            $steps += ("{0,-24} {1}" -f (Get-Text 'WizardSdk' $L), $sdkStatus)
+            $steps += ("{0,-24} {1}" -f (Get-Text 'WizardJavaHome' $L), $javaEnvStatus)
+            $steps += ("{0,-24} {1}" -f (Get-Text 'WizardAndroidHome' $L), $androidEnvStatus)
 
 
             if (-not $allAppsInstalled) { $steps += $(Get-Text 'RunAutoInstall' $L) }
@@ -1463,7 +1718,7 @@ function Restore-ProjectFromBackup {
         $projectName = $projectName -replace '^[a-zA-Z]:', '' -replace '^[\\/]+', ''
 
         if ([string]::IsNullOrWhiteSpace($projectName) -or $projectName.Length -le 1) {
-            $projectName = Read-Host "Project Name"
+            $projectName = Read-Host (Get-Text 'RestoreProjectName' $Lang)
         }
 
         $targetProjectPath = Join-Path $RootPath $projectName
@@ -1500,7 +1755,7 @@ function Restore-ProjectFromBackup {
         Write-Host "`n$(Get-Text 'RestSuccess' $Lang)" -ForegroundColor Green
 
     } catch {
-        Write-Host "`n[ERROR] $_" -ForegroundColor Red
+        Write-Host "`n$((Get-Text 'RestoreFailed' $Lang) -f $_)" -ForegroundColor Red
     } finally {
         if (Test-Path $tempExtractDir) {
             Remove-Item $tempExtractDir -Recurse -Force -ErrorAction SilentlyContinue
@@ -1512,7 +1767,10 @@ function Restore-ProjectFromBackup {
 }
 
 function Update-AndroidVersionCode {
-    param ([string]$AppJsonPath)
+    param (
+        [string]$AppJsonPath,
+        [string]$Lang
+    )
     
     if (-not (Test-Path $AppJsonPath)) { return 1 }
     
@@ -1543,10 +1801,10 @@ function Update-AndroidVersionCode {
         $updatedJson = $jsonObj | ConvertTo-Json -Depth 10
         [System.IO.File]::WriteAllText($AppJsonPath, $updatedJson, (New-Object System.Text.UTF8Encoding $false))
         
-        Write-Host "[SYSTEM] Android versionCode incremented: $currentCode -> $newCode" -ForegroundColor Green
+        Write-Host ((Get-Text 'VersionCodeUpdated' $Lang) -f $currentCode, $newCode) -ForegroundColor Green
         return $newCode
     } catch {
-        Write-Host "[WARNING] Could not increment versionCode: $_" -ForegroundColor Yellow
+        Write-Host ((Get-Text 'VersionCodeUpdateFailed' $Lang) -f $_) -ForegroundColor Yellow
         return 1
     }
 }
@@ -1684,8 +1942,8 @@ function Show-ConfigMenu {
             ("{0,-32} : [{1}]" -f $(Get-Text 'LangSelect' $L), $cfg.Language),
             ("{0,-32} : {1}"   -f $(Get-Text 'KeystorePath' $L), $cfg.KeystorePath),
             "$(Get-Text 'UpdateBuilder' $L)",
-            "[F] SFTP DEPLOYMENT CONFIGURATION",
-            "[I] SETUP WIZARD (SYSTEM STATUS)",
+            "$(Get-Text 'SftpSettings' $L)",
+            "$(Get-Text 'WizardSettings' $L)",
             "$(Get-Text 'Back' $L)"
         )
         $idx = Show-Menu -Title "$(Get-Text 'Settings' $L)" -Options $opts -InitialIndex $global:configMenuIndex
@@ -1742,10 +2000,14 @@ function Show-ConfigMenu {
             }
             $(Get-Text 'LangSelect' $L)
             {
-                $langOpts = @("English (EN)", "Deutsch (DE)", "Čeština (CZ)")
+                $langOpts = @(
+                    (Get-Text 'LanguageEnglish' $L),
+                    (Get-Text 'LanguageGerman' $L),
+                    (Get-Text 'LanguageCzech' $L)
+                )
                 $currentIdx = switch ($cfg.Language) { "CZ" { 2 } "DE" { 1 } default { 0 } }
                 
-                $lIdx = Show-Menu -Title "LANGUAGE SELECTION" -Options $langOpts -InitialIndex $currentIdx
+                $lIdx = Show-Menu -Title (Get-Text 'LanguageTitle' $L) -Options $langOpts -InitialIndex $currentIdx
                 if ($lIdx -ne -1) {
                     if ($lIdx -eq 0) { $cfg.Language = "EN" }
                     elseif ($lIdx -eq 2) { $cfg.Language = "CZ" }
@@ -1765,10 +2027,10 @@ function Show-ConfigMenu {
             "$(Get-Text 'UpdateBuilder' $L)" { 
                 Update-SelfFromGitHub 
             }
-            "[F] SFTP DEPLOYMENT CONFIGURATION" { 
+            (Get-Text 'SftpSettings' $L) {
                 Show-SetupSFTP 
             }
-            "[I] SETUP WIZARD (SYSTEM STATUS)" { 
+            (Get-Text 'WizardSettings' $L) {
                 Show-SetupWizard 
             }
         }
@@ -1890,12 +2152,12 @@ while ($true) {
     if ($pIndex -eq $newProjIndex) {
         # 1. KROK: VÝBĚR TYPU PROJEKTU (NEJPRVE)
         $typeOptions = @(
-            "1) Expo (Android / iOS App)",
-            "2) Node.js (Web / API)",
+            (Get-Text 'ExpoProjectType' $L),
+            (Get-Text 'NodeProjectType' $L),
             "$(Get-Text 'Back' $L)"
         )
         
-        $tIndex = Show-Menu -Title "SELECT PROJECT TYPE" -Options $typeOptions
+        $tIndex = Show-Menu -Title (Get-Text 'ProjectTypeTitle' $L) -Options $typeOptions
         if ($tIndex -eq -1 -or $tIndex -eq 2) { 
             continue 
         }
@@ -2037,14 +2299,14 @@ while ($true) {
             "$(Get-Text 'ActCleanCache' $L)"           
             }
             if ($isGitInstalled) {
-                "GitHub"
+                "$(Get-Text 'GitHubAction' $L)"
             }
             "$(Get-Text 'ActBackup' $L)"
             "$(Get-Text 'ActDel' $L)"
             "$(Get-Text 'ActBack' $L)"
         )
 
-        $aIndex = Show-Menu -Title "PROJECT: $selectedProject" -Options $actionList -InitialIndex $global:projectMenuIndex
+        $aIndex = Show-Menu -Title ((Get-Text 'ProjectMenuTitle' $L) -f $selectedProject) -Options $actionList -InitialIndex $global:projectMenuIndex
 
         # Pokud uživatel zmáčkl Esc ($aIndex -eq -1)
         if ($aIndex -eq -1) { break }
@@ -2083,7 +2345,7 @@ while ($true) {
                 $modOptions += "$(Get-Text 'InstallCustom' $L)"
                 $modOptions += "$(Get-Text 'Back' $L)"
 
-                $modIndex = Show-Menu -Title "PACKAGES ($selectedProject)" -Options $modOptions
+                $modIndex = Show-Menu -Title ((Get-Text 'PackageMenuTitle' $L) -f $selectedProject) -Options $modOptions
                 if ($modIndex -eq -1 -or $modIndex -eq ($modOptions.Count - 1)) {
                     $skipPause = $true
                     continue
@@ -2154,10 +2416,10 @@ while ($true) {
             }
             
             "$(Get-Text 'ActAabBuild' $L)" {
-                Write-Host "=== PRODUCTION AAB BUILD (GOOGLE PLAY) ===" -ForegroundColor Cyan
+                Write-Host "$(Get-Text 'ProductionBuildTitle' $L)" -ForegroundColor Cyan
                 
                 $appJsonPath = Join-Path $projectPath "app.json"
-                $newVerCode = Update-AndroidVersionCode -AppJsonPath $appJsonPath
+                $newVerCode = Update-AndroidVersionCode -AppJsonPath $appJsonPath -Lang $L
                 
                 Push-Location android
                 .\gradlew bundleRelease
@@ -2182,13 +2444,13 @@ while ($true) {
                         
                         $aabDestination = Join-Path $targetDir "$($slug)_v${ver}_b${newVerCode}.aab"
                         Move-Item -Path $aabSource -Destination $aabDestination -Force
-                        Write-Host "`n[SUCCESS] AAB successfully saved to: $aabDestination" -ForegroundColor Green
+                        Write-Host "`n$((Get-Text 'ApkBundleSaved' $L) -f $aabDestination)" -ForegroundColor Green
 
-                        Write-Host "`nCreating automatic backup of the updated production state..." -ForegroundColor Cyan
+                        Write-Host "`n$(Get-Text 'CreatingAutoBackup' $L)" -ForegroundColor Cyan
                         Invoke-ProjectBackup -SelectedProject $selectedProject -ProjectPath $projectPath -ProjectsRoot $projectsRoot -PType $pType -Lang $L
                     }
                 } else {
-                    Write-Host "`n[ERROR] Production AAB build failed!" -ForegroundColor Red
+                    Write-Host "`n$(Get-Text 'ProductionBuildFailed' $L)" -ForegroundColor Red
                 }
             }
 
@@ -2196,14 +2458,14 @@ while ($true) {
                 Write-Host "$(Get-Text 'CleanCacheTitle' $L)" -ForegroundColor Cyan
 
                 # 1. Ukončení běžících Node.js a Java procesů (uvolnění zámků na soubory)
-                Write-Host "`n[1/6] Stopping running Node and Java processes..." -ForegroundColor Yellow
+                Write-Host "`n$(Get-Text 'CacheStopProcesses' $L)" -ForegroundColor Yellow
                 cmd /c "taskkill /f /im node.exe 2>nul"
                 cmd /c "taskkill /f /im java.exe 2>nul"
                 Start-Sleep -Seconds 1
 
                 # 2. Vyčištění Gradle buildu ve složce android/
                 if (Test-Path (Join-Path $projectPath "android")) {
-                    Write-Host "[2/6] Cleaning Gradle build files (android/.gradle & android/app/build)..." -ForegroundColor Yellow
+                    Write-Host "$(Get-Text 'CacheCleanGradle' $L)" -ForegroundColor Yellow
                     Push-Location android
                     try {
                         .\gradlew clean
@@ -2215,11 +2477,11 @@ while ($true) {
                         Remove-Item -Path $androidGradleCache -Recurse -Force -ErrorAction SilentlyContinue
                     }
                 } else {
-                    Write-Host "[2/6] Android folder not prebuilt yet, skipping Gradle clean." -ForegroundColor Gray
+                    Write-Host "$(Get-Text 'CacheSkipGradle' $L)" -ForegroundColor Gray
                 }
 
                 # 3. Vyčištění Metro Bundler & Expo Cache v uživatelském profilu
-                Write-Host "[3/6] Clearing Metro Bundler & Expo caches..." -ForegroundColor Yellow
+                Write-Host "$(Get-Text 'CacheClearExpo' $L)" -ForegroundColor Yellow
                 $envTemp = $env:TEMP
                 $localAppData = $env:LOCALAPPDATA
 
@@ -2239,7 +2501,7 @@ while ($true) {
                 }
 
                 # 4. Vyčištění dočasných složek balíčkovacího systému (npm / yarn / watchman)
-                Write-Host "[4/6] Cleaning NPM / Watchman cache..." -ForegroundColor Yellow
+                Write-Host "$(Get-Text 'CacheCleanNpm' $L)" -ForegroundColor Yellow
                 try {
                     npx --yes watchman watch-del-all 2>$null
                 } catch {}
@@ -2247,19 +2509,19 @@ while ($true) {
                 # 5. Volitelné čištění lock souborů nebo node_modules/.cache
                 $nodeModulesCache = Join-Path $projectPath "node_modules\.cache"
                 if (Test-Path $nodeModulesCache) {
-                    Write-Host "[5/6] Cleaning node_modules/.cache..." -ForegroundColor Yellow
+                    Write-Host "$(Get-Text 'CacheCleanNode' $L)" -ForegroundColor Yellow
                     Remove-Item -Path $nodeModulesCache -Recurse -Force -ErrorAction SilentlyContinue
                 } else {
-                    Write-Host "[5/6] node_modules/.cache is already clean." -ForegroundColor Gray
+                    Write-Host "$(Get-Text 'CacheNodeClean' $L)" -ForegroundColor Gray
                 }
 
                 # 6. Resetování Expo štítku / re-index
-                Write-Host "[6/6] Verifying project integrity..." -ForegroundColor Yellow
+                Write-Host "$(Get-Text 'CacheVerify' $L)" -ForegroundColor Yellow
                 
                 Write-Host "`n$(Get-Text 'CleanCacheSuccess' $L)" -ForegroundColor Green
             }
 
-            "GitHub" {
+            (Get-Text 'GitHubAction' $L) {
                 Show-GitHub
                 $skipPause = $true
             }
