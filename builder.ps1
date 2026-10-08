@@ -2106,46 +2106,47 @@ while ($true) {
         continue
     }
 
-    if ($pIndex -eq $GitCloneIndex) {
+    if ($pIndex -eq$GitCloneIndex) {
         Clear-Host
         Write-Host (Get-Text 'GitTitle' $L) -ForegroundColor Cyan
-        $repoInput = Read-Host (Get-Text 'EnterGitRepo' $L)
+        $repoInput = Read-Host (Get-Text 'EnterGitRepo'$L)
 
         if ([string]::IsNullOrWhiteSpace($repoInput)) {
             continue
         }
 
-        if (-not [string]::IsNullOrWhiteSpace($repoInput)) {
-            # Vytáhne název projektu za lomítkem pro návrh složky
-            $defaultFolder = ($repoInput -split '/')[-1].Replace('.git','')
+        # 1. Získání výchozího názvu z repozitáře (např. local-android-builder)
+        $defaultFolder = ($repoInput -split '/')[-1].Replace('.git','')
 
-            # Formátovaný dotaz na název složky podle jazyka
-            $targetFolder = (Get-Text 'EnterLocalFolder' $L) -f $defaultFolder
-            if ([string]::IsNullOrWhiteSpace($targetFolder)) { $targetFolder = $defaultFolder }
+        # 2. Vytvoření textu dotazu a načtení vstupu od uživatele přes Read-Host
+        $promptText = (Get-Text 'EnterLocalFolder' $L) -f $defaultFolder
+        $inputFolder = Read-Host $promptText
 
-            $targetPath = Join-Path $projectsRoot $targetFolder
+        # 3. Pokud stiskne Enter (prázdný vstup), použije se $defaultFolder
+        $targetFolder = if ([string]::IsNullOrWhiteSpace($inputFolder)) { $defaultFolder } else {$inputFolder.Trim() }
+
+        $targetPath = Join-Path $projectsRoot $targetFolder
+        
+        if (Test-Path $targetPath) {
+            Write-Host "`n$(Get-Text 'FolderExistsErr' $L) $targetFolder" -ForegroundColor Red
+        } else {
+            Write-Host "`n$(Get-Text 'CloningRepo'$L)" -ForegroundColor Yellow
+            git clone "https://github.com/$repoInput.git" $targetPath
             
-            if (Test-Path $targetPath) {
-                Write-Host "`n$(Get-Text 'FolderExistsErr' $L) $targetFolder" -ForegroundColor Red
-            } else {
-                # 1. Stažení čistého kódu a git historie
-                Write-Host "`n$(Get-Text 'CloningRepo' $L)" -ForegroundColor Yellow
-                git clone "https://github.com/$repoInput.git" $targetPath
+            if ($LASTEXITCODE -eq 0) {
+                Set-Location $targetPath
+                Write-Host "`n$(Get-Text 'InstallingDeps' $L)" -ForegroundColor Yellow
+                npm install
                 
-                if ($LASTEXITCODE -eq 0) {
-                    # 2. Instalace knihoven
-                    Set-Location $targetPath
-                    Write-Host "`n$(Get-Text 'InstallingDeps' $L)" -ForegroundColor Yellow
-                    npm install
-                    
-                    # Volitelně pro Expo projekty: npx expo prebuild --clean
-                    
-                    Write-Host "`n$(Get-Text 'CloneSuccess' $L)" -ForegroundColor Green
-                } else {
-                    Write-Host "`n$(Get-Text 'CloneFail' $L)" -ForegroundColor Red
-                }
+                Write-Host "`n$(Get-Text 'CloneSuccess'$L)" -ForegroundColor Green
+            } else {
+                Write-Host "`n$(Get-Text 'CloneFail' $L)" -ForegroundColor Red
             }
         }
+
+        Write-Host "`n$(Get-Text 'PressKey'$L)" -ForegroundColor Gray
+        $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        continue
     }
 
     # --- NOVÝ PROJEKT ---
