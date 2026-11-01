@@ -253,6 +253,10 @@ function Get-Text {
             GitStatus        = "Git status"
             GitPush          = "Git push"
             GitPull          = "Git pull"
+            GitDisconnect    = "Disconnect Git change tracking (.git)"
+            GitDisconnectConfirm = "Remove local Git metadata and history? The GitHub remote will not be changed. (Y/N)"
+            GitDisconnectDone = "Local Git tracking was disconnected. The remote repository was not changed."
+            GitDisconnectNotRepo = "This project has no local .git metadata to disconnect."
             GitRemotePrompt  = "Set USER/repo.git (e.g. BaboonCZ/local-android-builder)"
 
             # Akce projektu
@@ -277,6 +281,7 @@ function Get-Text {
             UpdateNeeded = "-> NEED UPDATE (v{0})"
             StatusOk = "[ OK: {0} ]"
             WizardNode = "Node.js:"
+            WizardPython = "Python:"
             WizardJava = "OpenJDK 17:"
             WizardAndroidStudio = "Android Studio:"
             WizardNotepad = "Notepad++:"
@@ -286,6 +291,9 @@ function Get-Text {
             WizardSdk = "Android SDK:"
             WizardJavaHome = "JAVA_HOME:"
             WizardAndroidHome = "ANDROID_HOME:"
+            PythonVenvCreating = "Creating project virtual environment (.venv)..."
+            PythonVenvCreated = "[OK] Project virtual environment created."
+            PythonVenvFailed = "[ERROR] Could not create the project virtual environment. Check the Python installation."
             RunAutoInstall = "[>>>] RUN AUTOMATIC INSTALLATION OF MISSING APPS [<<<]"
             RunAutoEnv = "[A] AUTOMATICALLY CONFIGURE WINDOWS ENV (JAVA_HOME & ANDROID_HOME)"
             WizBack = "<-- BACK TO SETTINGS"
@@ -346,6 +354,13 @@ function Get-Text {
             ProjectTypeTitle = "SELECT PROJECT TYPE"
             ExpoProjectType = "Expo (Android / iOS App)"
             NodeProjectType = "Node.js (Web / API)"
+            PythonProjectType = "Python (Script / Application)"
+            PythonRun = "Run Python project"
+            PythonBuild = "Build Python executable (PyInstaller)"
+            PythonRuntimeMissing = "Python was not found. Install Python and ensure it is available in PATH."
+            PythonEntryMissing = "No Python entry-point (.py) found in the project root."
+            PythonBuildTitle = "=== BUILDING PYTHON EXECUTABLE ==="
+            PythonBuildFailed = "Python build failed with exit code:"
             ProjectMenuTitle = "PROJECT: {0}"
             PackageMenuTitle = "PACKAGES ({0})"
             RestoreProjectName = "Project Name"
@@ -431,6 +446,10 @@ function Get-Text {
             GitStatus        = "Stav Gitu"
             GitPush          = "Odeslat změny (push)"
             GitPull          = "Stáhnout změny (pull)"
+            GitDisconnect    = "Odpojit sledování změn Gitem (.git)"
+            GitDisconnectConfirm = "Odstranit místní Git metadata a historii? Vzdálený GitHub repozitář zůstane beze změny. (A/N)"
+            GitDisconnectDone = "Místní sledování Gitem bylo odpojeno. Vzdálený repozitář nebyl změněn."
+            GitDisconnectNotRepo = "Projekt nemá místní metadata .git, která by šla odpojit."
             GitRemotePrompt  = "Zadej USER/repo.git (např. BaboonCZ/local-android-builder)"
             
             Act1 = "Otevřít nastavené soubory v Notepad++"
@@ -454,6 +473,7 @@ function Get-Text {
             UpdateNeeded = "-> JE K DISPOZICI AKTUALIZACE (v{0})"
             StatusOk = "[ V POŘÁDKU: {0} ]"
             WizardNode = "Node.js:"
+            WizardPython = "Python:"
             WizardJava = "OpenJDK 17:"
             WizardAndroidStudio = "Android Studio:"
             WizardNotepad = "Notepad++:"
@@ -463,6 +483,9 @@ function Get-Text {
             WizardSdk = "Android SDK:"
             WizardJavaHome = "JAVA_HOME:"
             WizardAndroidHome = "ANDROID_HOME:"
+            PythonVenvCreating = "Zakládám virtuální prostředí projektu (.venv)..."
+            PythonVenvCreated = "[OK] Virtuální prostředí projektu bylo vytvořeno."
+            PythonVenvFailed = "[CHYBA] Virtuální prostředí se nepodařilo vytvořit. Zkontroluj instalaci Pythonu."
             RunAutoInstall = "[>>>] SPUSTIT AUTOMATICKOU INSTALACI CHYBĚJÍCÍCH APLIKACÍ [<<<]"
             RunAutoEnv = "[A] AUTOMATICKY KONFIGUROVAT PROSTŘEDÍ WINDOWS (JAVA_HOME & ANDROID_HOME)"
             WizBack = "<-- ZPĚT DO NASTAVENÍ"
@@ -521,6 +544,13 @@ function Get-Text {
             ProjectTypeTitle = "VYBER TYP PROJEKTU"
             ExpoProjectType = "Expo (aplikace pro Android / iOS)"
             NodeProjectType = "Node.js (web / API)"
+            PythonProjectType = "Python (skript / aplikace)"
+            PythonRun = "Spustit Python projekt"
+            PythonBuild = "Sestavit Python aplikaci (PyInstaller)"
+            PythonRuntimeMissing = "Python nebyl nalezen. Nainstaluj Python a přidej jej do PATH."
+            PythonEntryMissing = "V kořenové složce projektu nebyl nalezen vstupní soubor .py."
+            PythonBuildTitle = "=== SESTAVUJI PYTHON APLIKACI ==="
+            PythonBuildFailed = "Sestavení Python aplikace selhalo s kódem:"
             ProjectMenuTitle = "PROJEKT: {0}"
             PackageMenuTitle = "BALÍČKY ({0})"
             RestoreProjectName = "Název projektu"
@@ -606,6 +636,10 @@ function Get-Text {
             GitStatus        = "Git-Status"
             GitPush          = "Änderungen übertragen (push)"
             GitPull          = "Änderungen abrufen (pull)"
+            GitDisconnect    = "Git-Änderungsverfolgung trennen (.git)"
+            GitDisconnectConfirm = "Lokale Git-Metadaten und Verlauf entfernen? Das GitHub-Remote bleibt unverändert. (J/N)"
+            GitDisconnectDone = "Lokale Git-Verfolgung wurde getrennt. Das Remote-Repository blieb unverändert."
+            GitDisconnectNotRepo = "Dieses Projekt enthält keine lokalen .git-Metadaten zum Trennen."
             GitRemotePrompt  = "USER/repo.git eingeben (z. B. BaboonCZ/local-android-builder)"
             
             Act1 = "Konfigurierte Dateien in Notepad++ öffnen"
@@ -632,6 +666,7 @@ function Get-Text {
             UpdateNeeded = "-> UPDATE VERFÜGBAR (v{0})"
             StatusOk = "[ OK: {0} ]"
             WizardNode = "Node.js:"
+            WizardPython = "Python:"
             WizardJava = "OpenJDK 17:"
             WizardAndroidStudio = "Android Studio:"
             WizardNotepad = "Notepad++:"
@@ -641,6 +676,9 @@ function Get-Text {
             WizardSdk = "Android-SDK:"
             WizardJavaHome = "JAVA_HOME:"
             WizardAndroidHome = "ANDROID_HOME:"
+            PythonVenvCreating = "Virtuelle Projektumgebung wird erstellt (.venv)..."
+            PythonVenvCreated = "[OK] Virtuelle Projektumgebung wurde erstellt."
+            PythonVenvFailed = "[FEHLER] Virtuelle Umgebung konnte nicht erstellt werden. Überprüfen Sie Python."
             RunAutoInstall = "[>>>] AUTOMATISCHE INSTALLATION FEHLENDER APPS STARTEN [<<<]"
             RunAutoEnv = "[A] WINDOWS-UMGEBUNG AUTOMATISCH KONFIGURIEREN (JAVA_HOME & ANDROID_HOME)"
             WizBack = "<-- ZURÜCK ZU EINSTELLUNGEN"
@@ -696,6 +734,13 @@ function Get-Text {
             ProjectTypeTitle = "PROJEKTTYP AUSWÄHLEN"
             ExpoProjectType = "Expo (Android-/iOS-App)"
             NodeProjectType = "Node.js (Web / API)"
+            PythonProjectType = "Python (Skript / Anwendung)"
+            PythonRun = "Python-Projekt starten"
+            PythonBuild = "Python-Anwendung erstellen (PyInstaller)"
+            PythonRuntimeMissing = "Python wurde nicht gefunden. Installieren Sie Python und fügen Sie es zu PATH hinzu."
+            PythonEntryMissing = "Keine Python-Einstiegsdatei (.py) im Projektstamm gefunden."
+            PythonBuildTitle = "=== PYTHON-ANWENDUNG WIRD ERSTELLT ==="
+            PythonBuildFailed = "Erstellen der Python-Anwendung fehlgeschlagen, Exitcode:"
             ProjectMenuTitle = "PROJEKT: {0}"
             PackageMenuTitle = "PAKETE ({0})"
             RestoreProjectName = "Projektname"
@@ -985,6 +1030,28 @@ function Show-SetupSFTP {
         }
     }
 }
+function Disconnect-GitTracking {
+    param ([string]$ProjectPath, [string]$Lang)
+
+    $gitMetadataPath = Join-Path $ProjectPath ".git"
+    if (-not (Test-Path -LiteralPath $gitMetadataPath)) {
+        Write-Host (Get-Text 'GitDisconnectNotRepo' $Lang) -ForegroundColor Yellow
+        return $false
+    }
+
+    $confirmation = Read-Host (Get-Text 'GitDisconnectConfirm' $Lang)
+    if ($confirmation -notmatch '^(?i:Y|YES|A|ANO|J|JA)$') { return $false }
+
+    try {
+        Remove-Item -LiteralPath $gitMetadataPath -Recurse -Force -ErrorAction Stop
+        Write-Host (Get-Text 'GitDisconnectDone' $Lang) -ForegroundColor Green
+        return $true
+    } catch {
+        Write-Host "Could not remove local Git metadata: $_" -ForegroundColor Red
+        return $false
+    }
+}
+
 function Show-GitHub {
     while ($true) {
         $cfg = Get-Config
@@ -996,6 +1063,7 @@ function Show-GitHub {
             (Get-Text 'GitStatus' $L),
             (Get-Text 'GitPush' $L),
             (Get-Text 'GitPull' $L),
+            (Get-Text 'GitDisconnect' $L),
             "$(Get-Text 'Back' $L)"
         )
 
@@ -1045,6 +1113,12 @@ function Show-GitHub {
                 Write-Host "`n$(Get-Text 'PressKey' $L)" -ForegroundColor Gray
                 $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
             }
+            5 {
+                $disconnected = Disconnect-GitTracking -ProjectPath (Get-Location).Path -Lang $L
+                Write-Host "`n$(Get-Text 'PressKey' $L)" -ForegroundColor Gray
+                $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+                if ($disconnected) { return }
+            }
         }
     }
 }
@@ -1058,24 +1132,153 @@ function Save-Config ($cfg) {
 }
 
 # --- DETEKCE TYPU PROJEKTU ---
+function Save-ProjectType {
+    param ([string]$ProjectPath, [string]$ProjectType)
+
+    $projIni = Join-Path $ProjectPath "project.ini"
+    $lines = if (Test-Path $projIni) { @(Get-Content $projIni) } else { @() }
+    $typeLineFound = $false
+    for ($index = 0; $index -lt $lines.Count; $index++) {
+        if ($lines[$index] -match '^\s*ProjectType\s*=') {
+            $lines[$index] = "ProjectType = $ProjectType"
+            $typeLineFound = $true
+            break
+        }
+    }
+    if (-not $typeLineFound) {
+        $lines += "ProjectType = $ProjectType"
+    }
+
+    try {
+        [System.IO.File]::WriteAllLines($projIni, [string[]]$lines, (New-Object System.Text.UTF8Encoding $false))
+    } catch {
+        Write-Host "Could not save the selected project type: $_" -ForegroundColor Yellow
+    }
+}
+
 function Get-ProjectType {
-    param ([string]$ProjectPath)
+    param ([string]$ProjectPath, [switch]$PromptForChoice)
 
     $projIni = Join-Path $ProjectPath "project.ini"
     if (Test-Path $projIni) {
-        $lines = Get-Content $projIni
-        foreach ($line in $lines) {
+        foreach ($line in (Get-Content $projIni)) {
             if ($line -match '^\s*ProjectType\s*=\s*(.*)\s*$') {
-                return $matches[1].Trim().ToLower()
+                $configuredType = $matches[1].Trim().ToLower()
+                if ($configuredType -and $configuredType -ne "unknown") {
+                    return $configuredType
+                }
+                break
             }
         }
     }
 
-    # Fallback detekce pokud project.ini neexistuje
-    if (Test-Path (Join-Path $ProjectPath "app.json")) { return "expo" }
-    if (Test-Path (Join-Path $ProjectPath "package.json")) { return "nodejs" }
+    $hasExpoConfig = (Test-Path (Join-Path $ProjectPath "app.json")) -or
+        (Test-Path (Join-Path $ProjectPath "app.config.js")) -or
+        (Test-Path (Join-Path $ProjectPath "app.config.ts"))
+    $hasNodeFiles = (Test-Path (Join-Path $ProjectPath "package.json")) -or
+        (Test-Path (Join-Path $ProjectPath "package-lock.json")) -or
+        (Test-Path (Join-Path $ProjectPath "yarn.lock")) -or
+        (Test-Path (Join-Path $ProjectPath "pnpm-lock.yaml")) -or
+        (Test-Path (Join-Path $ProjectPath "server.js")) -or
+        (Test-Path (Join-Path $ProjectPath "server.ts")) -or
+        (Test-Path (Join-Path $ProjectPath "index.js")) -or
+        (Test-Path (Join-Path $ProjectPath "index.ts"))
+    $hasPythonFiles = (Test-Path (Join-Path $ProjectPath "pyproject.toml")) -or
+        (Test-Path (Join-Path $ProjectPath "requirements.txt")) -or
+        (Test-Path (Join-Path $ProjectPath "setup.py")) -or
+        (Test-Path (Join-Path $ProjectPath "Pipfile")) -or
+        (Get-ChildItem -Path $ProjectPath -Filter "*.py" -File -ErrorAction SilentlyContinue | Select-Object -First 1)
+
+    $detectedTypes = @()
+    if ($hasExpoConfig) {
+        $detectedTypes += "expo"
+    } elseif ($hasNodeFiles) {
+        $detectedTypes += "nodejs"
+    }
+    if ($hasPythonFiles) {
+        $detectedTypes += "python"
+    }
+
+    if ($detectedTypes.Count -eq 1) {
+        return $detectedTypes[0]
+    }
+    if ($detectedTypes.Count -gt 1 -and $PromptForChoice) {
+        $typeLabels = @{
+            expo = Get-Text 'ExpoProjectType' $global:currentLanguage
+            nodejs = Get-Text 'NodeProjectType' $global:currentLanguage
+            python = Get-Text 'PythonProjectType' $global:currentLanguage
+        }
+        $options = @($detectedTypes | ForEach-Object { $typeLabels[$_] }) + @((Get-Text 'Back' $global:currentLanguage))
+        $selection = Show-Menu -Title (Get-Text 'ProjectTypeTitle' $global:currentLanguage) -Options $options
+        if ($selection -ge 0 -and $selection -lt $detectedTypes.Count) {
+            $selectedType = $detectedTypes[$selection]
+            Save-ProjectType -ProjectPath $ProjectPath -ProjectType $selectedType
+            return $selectedType
+        }
+    }
 
     return "unknown"
+}
+
+function Get-PythonRuntime {
+    param ([string]$ProjectPath)
+
+    foreach ($environmentName in @(".venv", "venv")) {
+        $environmentPython = Join-Path $ProjectPath "$environmentName\Scripts\python.exe"
+        if (Test-Path $environmentPython) {
+            return @{ Path = $environmentPython; Prefix = @() }
+        }
+    }
+
+    $pythonCommand = Get-Command "python" -ErrorAction SilentlyContinue
+    if ($pythonCommand) {
+        $versionOutput = try { (& $pythonCommand.Source --version 2>&1 | Out-String).Trim() } catch { $null }
+        if ($versionOutput -match 'Python\s+[0-9]+(?:\.[0-9]+){1,2}') {
+            return @{ Path = $pythonCommand.Source; Prefix = @() }
+        }
+    }
+
+    $pythonLauncher = Get-Command "py" -ErrorAction SilentlyContinue
+    if ($pythonLauncher) {
+        $versionOutput = try { (& $pythonLauncher.Source -3 --version 2>&1 | Out-String).Trim() } catch { $null }
+        if ($versionOutput -match 'Python\s+[0-9]+(?:\.[0-9]+){1,2}') {
+            return @{ Path = $pythonLauncher.Source; Prefix = @("-3") }
+        }
+    }
+
+    return $null
+}
+
+function Get-PythonBuildArguments {
+    param ([hashtable]$Runtime, [string]$SpecPath, [string]$EntryPoint)
+
+    if ($SpecPath) {
+        return @($Runtime.Prefix) + @("-m", "PyInstaller", $SpecPath)
+    }
+
+    return @($Runtime.Prefix) + @("-m", "PyInstaller", "--onefile", $EntryPoint)
+}
+
+function Select-PythonEntryPoint {
+    param ([string]$ProjectPath, [string]$ProjectName, [string]$Lang)
+
+    $preferredNames = @("main.py", "app.py", "$ProjectName.py")
+    foreach ($name in $preferredNames) {
+        $candidate = Join-Path $ProjectPath $name
+        if (Test-Path $candidate) { return $candidate }
+    }
+
+    $pythonFiles = @(Get-ChildItem -Path $ProjectPath -Filter "*.py" -File -ErrorAction SilentlyContinue)
+    if ($pythonFiles.Count -eq 1) { return $pythonFiles[0].FullName }
+    if ($pythonFiles.Count -gt 1) {
+        $options = @($pythonFiles | ForEach-Object { $_.Name }) + @((Get-Text 'Back' $Lang))
+        $selection = Show-Menu -Title (Get-Text 'PythonProjectType' $Lang) -Options $options
+        if ($selection -ge 0 -and $selection -lt $pythonFiles.Count) {
+            return $pythonFiles[$selection].FullName
+        }
+    }
+
+    return $null
 }
 
 # --- 1. Inicializace chybějících složek a šablon ---
@@ -1346,6 +1549,7 @@ function Get-VersionPrefix {
 function Show-SetupWizard {
     $cfg = Get-Config
     $L = $cfg.Language
+    $pythonPackageId = "Python.Python.3.13"
 
     $pathRegistered = Register-InWindowsPath -DirToRegister $scriptDir
     Update-SessionPath
@@ -1387,6 +1591,16 @@ function Show-SetupWizard {
                     } else {
                         "[ $nodeVer ]"
                     }
+
+            $pythonVersionText = $null
+            if (Get-Command "python" -ErrorAction SilentlyContinue) {
+                $pythonVersionText = try { (& python --version 2>&1 | Out-String).Trim() } catch { $null }
+            }
+            if ([string]::IsNullOrWhiteSpace($pythonVersionText) -and (Get-Command "py" -ErrorAction SilentlyContinue)) {
+                $pythonVersionText = try { (& py -3 --version 2>&1 | Out-String).Trim() } catch { $null }
+            }
+            $pythonVer = if ($pythonVersionText -match 'Python\s+([0-9]+(?:\.[0-9]+){1,2})') { "v$($matches[1])" } else { $null }
+            $pythonStatus = if ($pythonVer) { "[ $pythonVer ]" } else { $(Get-Text 'NotInstalled' $L) }
 
             $javaVer = try {$jOut = (java -version 2>&1 | Out-String)
                 if ($jOut -match 'version "(17\.[^"]+)"') { "v" + $matches[1] } else { $null }
@@ -1520,7 +1734,7 @@ function Show-SetupWizard {
             $androidEnvValid = ($envAndroid -and (Test-Path $envAndroid) -and (Test-Path (Join-Path $envAndroid "platform-tools")))
             $androidEnvStatus = if ($androidEnvValid) { (Get-Text 'StatusOk' $L) -f $envAndroid } else { $(Get-Text 'BadVer' $L) }
 
-            $allAppsInstalled = ($nodeVer -and $javaVer -and $asExe -and $nppExe -and $codeExe -and $hasContinueMod -and (Test-Path $sdkDefault))
+            $allAppsInstalled = ($nodeVer -and $pythonVer -and $javaVer -and $asExe -and $nppExe -and $codeExe -and $hasContinueMod -and (Test-Path $sdkDefault))
             $allEnvValid = ($javaEnvValid -and $androidEnvValid)
 
             $steps = @()
@@ -1534,6 +1748,7 @@ function Show-SetupWizard {
             $steps += ("{0,-24} {1}" -f (Get-Text 'WizardSdk' $L), $sdkStatus)
             $steps += ("{0,-24} {1}" -f (Get-Text 'WizardJavaHome' $L), $javaEnvStatus)
             $steps += ("{0,-24} {1}" -f (Get-Text 'WizardAndroidHome' $L), $androidEnvStatus)
+            $steps += ("{0,-24} {1}" -f (Get-Text 'WizardPython' $L), $pythonStatus)
 
 
             if (-not $allAppsInstalled) { $steps += $(Get-Text 'RunAutoInstall' $L) }
@@ -1616,11 +1831,17 @@ function Show-SetupWizard {
                 }
                 Update-SessionPath
             }
+            10 { # Python
+                Test-AdminPrivileges
+                winget install --id $pythonPackageId -e --force --accept-package-agreements --accept-source-agreements
+                Update-SessionPath
+            }
             default {
                 # Sem propadnou pouze dynamicky vložené tlačítka před koncem
                 if ($selectedText -eq $(Get-Text 'RunAutoInstall' $L)) {
                     Test-AdminPrivileges
                     if (-not $nodeVer) { winget install --id OpenJS.NodeJS.LTS -e --force --accept-package-agreements --accept-source-agreements }
+                    if (-not $pythonVer) { winget install --id $pythonPackageId -e --force --accept-package-agreements --accept-source-agreements }
                     if (-not $javaVer) { winget install --id EclipseAdoptium.Temurin.17.JDK -e --force --accept-package-agreements --accept-source-agreements }
                     if (-not $nppExe) { winget install --id Notepad++.Notepad++ -e --force --accept-package-agreements --accept-source-agreements }
                     if (-not $codeExe) { winget install --id Microsoft.VisualStudioCode -e --force --accept-package-agreements --accept-source-agreements }
@@ -2057,6 +2278,7 @@ while ($true) {
         $tag = switch ($pType) {
             "expo"   { "[EXPO]" }
             "nodejs" { "[NODEJS]" }
+            "python" { "[PYTHON]" }
             default  { "[UNK]" }
         }
         $projects += $p
@@ -2155,11 +2377,12 @@ while ($true) {
         $typeOptions = @(
             (Get-Text 'ExpoProjectType' $L),
             (Get-Text 'NodeProjectType' $L),
+            (Get-Text 'PythonProjectType' $L),
             "$(Get-Text 'Back' $L)"
         )
-        
+
         $tIndex = Show-Menu -Title (Get-Text 'ProjectTypeTitle' $L) -Options $typeOptions
-        if ($tIndex -eq -1 -or $tIndex -eq 2) { 
+        if ($tIndex -eq -1 -or $tIndex -eq 3) {
             continue 
         }
 
@@ -2274,6 +2497,29 @@ while ($true) {
             }
 
             Write-Host "`n$(Get-Text 'ProjSuccess' $L)" -ForegroundColor Green
+        } elseif ($tIndex -eq 2) {
+            New-Item -ItemType Directory -Path $newProjectPath -Force | Out-Null
+            Set-Location $newProjectPath
+
+            [System.IO.File]::WriteAllText((Join-Path $newProjectPath "project.ini"), "ProjectType = python`r`n", (New-Object System.Text.UTF8Encoding $false))
+            $pythonEntryContent = "def main():`n    print(`"Hello from $formattedName`")`n`nif __name__ == `"__main__`":`n    main()`n"
+            [System.IO.File]::WriteAllText((Join-Path $newProjectPath "main.py"), $pythonEntryContent, (New-Object System.Text.UTF8Encoding $false))
+
+            $pythonRuntime = Get-PythonRuntime -ProjectPath $newProjectPath
+            if ($pythonRuntime) {
+                Write-Host (Get-Text 'PythonVenvCreating' $L) -ForegroundColor Cyan
+                $venvArgs = @($pythonRuntime.Prefix) + @("-m", "venv", ".venv")
+                & $pythonRuntime.Path @venvArgs
+                if ($LASTEXITCODE -eq 0) {
+                    Write-Host (Get-Text 'PythonVenvCreated' $L) -ForegroundColor Green
+                } else {
+                    Write-Host (Get-Text 'PythonVenvFailed' $L) -ForegroundColor Red
+                }
+            } else {
+                Write-Host (Get-Text 'PythonRuntimeMissing' $L) -ForegroundColor Yellow
+            }
+
+            Write-Host "`n$(Get-Text 'ProjSuccess' $L)" -ForegroundColor Green
         }
 
         Write-Host "`n$(Get-Text 'PressKey' $L)" -ForegroundColor Gray
@@ -2283,7 +2529,7 @@ while ($true) {
 
     $selectedProject = $projects[$pIndex]
     $projectPath = Join-Path $projectsRoot $selectedProject
-    $pType = Get-ProjectType -ProjectPath $projectPath
+    $pType = Get-ProjectType -ProjectPath $projectPath -PromptForChoice
     Set-Location $projectPath
 
     while ($true) {
@@ -2298,6 +2544,10 @@ while ($true) {
             "$(Get-Text 'Act7' $L)"
             "$(Get-Text 'ActAabBuild' $L)"
             "$(Get-Text 'ActCleanCache' $L)"           
+            }
+            if ($pType -eq "python") {
+                "$(Get-Text 'PythonRun' $L)"
+                "$(Get-Text 'PythonBuild' $L)"
             }
             if ($isGitInstalled) {
                 "$(Get-Text 'GitHubAction' $L)"
@@ -2325,6 +2575,61 @@ while ($true) {
         $exitToMainMenu = $false
 
         switch ($selectedAction) {
+            "$(Get-Text 'PythonRun' $L)" {
+                $python = Get-PythonRuntime -ProjectPath $projectPath
+                if (-not $python) {
+                    Write-Host (Get-Text 'PythonRuntimeMissing' $L) -ForegroundColor Red
+                } else {
+                    $entryPoint = Select-PythonEntryPoint -ProjectPath $projectPath -ProjectName $selectedProject -Lang $L
+                    if (-not $entryPoint) {
+                        Write-Host (Get-Text 'PythonEntryMissing' $L) -ForegroundColor Red
+                    } else {
+                        $pythonArgs = @($python.Prefix) + @($entryPoint)
+                        & $python.Path @pythonArgs
+                    }
+                }
+            }
+            "$(Get-Text 'PythonBuild' $L)" {
+                Write-Host (Get-Text 'PythonBuildTitle' $L) -ForegroundColor Cyan
+                $python = Get-PythonRuntime -ProjectPath $projectPath
+                if (-not $python) {
+                    Write-Host (Get-Text 'PythonRuntimeMissing' $L) -ForegroundColor Red
+                } else {
+                    $specFiles = @(Get-ChildItem -Path $projectPath -Filter "*.spec" -File -ErrorAction SilentlyContinue)
+                    $specPath = $null
+                    if ($specFiles.Count -eq 1) {
+                        $specPath = $specFiles[0].FullName
+                    } elseif ($specFiles.Count -gt 1) {
+                        $specOptions = @($specFiles | ForEach-Object { $_.Name }) + @((Get-Text 'Back' $L))
+                        $specSelection = Show-Menu -Title (Get-Text 'PythonBuildTitle' $L) -Options $specOptions
+                        if ($specSelection -ge 0 -and $specSelection -lt $specFiles.Count) {
+                            $specPath = $specFiles[$specSelection].FullName
+                        }
+                    }
+
+                    if ($specFiles.Count -gt 0 -and -not $specPath) {
+                        $skipPause = $true
+                        continue
+                    }
+
+                    if ($specPath) {
+                        $pythonArgs = Get-PythonBuildArguments -Runtime $python -SpecPath $specPath
+                    } else {
+                        $entryPoint = Select-PythonEntryPoint -ProjectPath $projectPath -ProjectName $selectedProject -Lang $L
+                        if (-not $entryPoint) {
+                            Write-Host (Get-Text 'PythonEntryMissing' $L) -ForegroundColor Red
+                            $skipPause = $true
+                            continue
+                        }
+                        $pythonArgs = Get-PythonBuildArguments -Runtime $python -EntryPoint $entryPoint
+                    }
+
+                    & $python.Path @pythonArgs
+                    if ($LASTEXITCODE -ne 0) {
+                        Write-Host "`n$(Get-Text 'PythonBuildFailed' $L) $LASTEXITCODE" -ForegroundColor Red
+                    }
+                }
+            }
             "$(Get-Text 'Act1' $L)"{
                 Open-InNotepadPlusPlus -ProjectPath $projectPath -Lang $L
             }
