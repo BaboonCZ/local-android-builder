@@ -1,6 +1,6 @@
-# 🚀 Local Android & Node.js Builder CLI
+# 🚀 Local Android, Node.js & Python Builder CLI
 
-A robust, interactive PowerShell-based CLI tool designed to manage the entire lifecycle of local Android (Expo / React Native) and Node.js projects. This utility automates environment setup, project creation, dependency management, compilation, cache wiping, and **direct SFTP deployment** with auto-generated version manifests—all without relying on cloud-based build services.
+A robust, interactive PowerShell-based CLI tool designed to manage the lifecycle of local Android (Expo / React Native), Node.js, and Python projects. This utility automates environment setup, project creation, dependency management, compilation, cache wiping, and **direct SFTP deployment** with auto-generated version manifests—all without relying on cloud-based build services.
 
 ---
 
@@ -12,7 +12,20 @@ Manage everything locally: scaffold a new Expo app, run a local dev server, comp
 ### 🛠️ Automated Environment Setup
 A built-in Setup Wizard checks and automatically installs missing dependencies via Windows Package Manager (`winget`). It natively handles:
 * Node.js (LTS), OpenJDK 17, Android Studio, VS Code, and Notepad++.
+* Python 3.13, with project-local virtual environments created as `.venv` for new Python projects.
 * Automatic injection and configuration of `JAVA_HOME`, `ANDROID_HOME`, and SDK platform tools into Windows environment variables.
+
+### 🐍 Python Projects
+Create and run Python projects directly from the project menu. The Builder detects Python installations through `python` or `py -3` and prefers a project's `.venv` or `venv` interpreter when available.
+* New Python projects include a `main.py` starter and automatically create `.venv` when a working Python installation is available.
+* Build a standalone executable with PyInstaller. If the project has a `.spec` file, the Builder uses it; otherwise it builds the selected entry-point script with `--onefile`.
+* Python projects without an explicit `project.ini` type are detected from files such as `pyproject.toml`, `requirements.txt`, `setup.py`, `Pipfile`, and `.py` scripts.
+
+### 🔎 Project Type Detection
+The project list detects Expo, Node.js, and Python projects from their files. If a project contains markers for multiple types, the Builder asks for its primary type when the project is opened and saves that choice in `project.ini`.
+
+### 🔗 GitHub Workflow
+The project GitHub menu supports repository initialization, remote setup, status, push, and pull. **Disconnect Git change tracking** removes only the project's local `.git` metadata after confirmation; it does not delete project files or modify the GitHub remote. The local Git history is removed.
 
 ### 🚀 1-Click SFTP Deployment & Auto-Updates
 Securely deploy compiled `.apk` files directly to your company's SFTP server using native Windows `curl.exe`. 
@@ -92,7 +105,7 @@ json
 
 ### 🏠 Main Menu
 * **Select Project:** Choose an existing project to open its dedicated action menu.
-* **Create New Project:** Interactive wizard for Expo (Android/iOS) or Node.js project scaffolding.
+* **Create New Project:** Interactive wizard for Expo (Android/iOS), Node.js, or Python project scaffolding.
 * **Restore Project:** Extract and reinstall dependencies from a `.backup` ZIP archive.
 * **Builder Settings:** Manage UI preferences, DPAPI-encrypted SFTP credentials, target build paths, and run the System Setup Wizard.
 
@@ -103,6 +116,11 @@ json
 * **Fast incremental build:** Compiles incremental changes into a release APK (`assembleRelease`).
 * **Clean regen & build:** Executes `expo prebuild --clean` followed by a fresh Gradle build.
 * **Build App Bundle (.aab):** Increments `versionCode`, builds a production AAB for Google Play, and triggers an automated source backup.
+
+### 🐍 Python Project Actions
+* **Run:** Runs the selected Python entry point using the project's `.venv` or `venv` when present, then falls back to the system Python runtime.
+* **Build:** Uses a project `.spec` file when available; without one, builds a single-file executable from the selected `.py` entry point. Install PyInstaller in the interpreter environment used by the project before building.
+* **Setup Wizard:** Installs Python through `winget` when it is missing. Creating a virtual environment also requires a working Python installation.
 
 ---
 
