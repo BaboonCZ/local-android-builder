@@ -19,13 +19,18 @@ A built-in Setup Wizard checks and automatically installs missing dependencies v
 Create and run Python projects directly from the project menu. The Builder detects Python installations through `python` or `py -3` and prefers a project's `.venv` or `venv` interpreter when available.
 * New Python projects include a `main.py` starter and automatically create `.venv` when a working Python installation is available.
 * Build a standalone executable with PyInstaller. If the project has a `.spec` file, the Builder uses it; otherwise it builds the selected entry-point script with `--onefile`.
+* Check imported modules against the selected Python environment; this reports missing imports without installing packages.
+* Install dependencies from `requirements.txt`, run tests with pytest (or unittest if pytest is unavailable), and run Ruff lint and formatting checks. If Ruff is missing, the Builder asks before installing it into the selected Python environment.
 * Python projects without an explicit `project.ini` type are detected from files such as `pyproject.toml`, `requirements.txt`, `setup.py`, `Pipfile`, and `.py` scripts.
+* The legacy `ProjectType = phyton` value is also recognized as `python`.
 
 ### 🔎 Project Type Detection
 The project list detects Expo, Node.js, and Python projects from their files. If a project contains markers for multiple types, the Builder asks for its primary type when the project is opened and saves that choice in `project.ini`.
 
 ### 🔗 GitHub Workflow
 The project GitHub menu supports repository initialization, remote setup, status, push, and pull. **Disconnect Git change tracking** removes only the project's local `.git` metadata after confirmation; it does not delete project files or modify the GitHub remote. The local Git history is removed.
+
+Builder updates use a separate Git menu in Builder settings and always target the Builder's own folder. The menu shows status and, before updating, fetches and previews incoming commits and file changes. Updates require a clean worktree and confirmation, and are applied only as a fast-forward; local changes or diverged branches are never overwritten.
 
 ### 🚀 1-Click SFTP Deployment & Auto-Updates
 Securely deploy compiled `.apk` files directly to your company's SFTP server using native Windows `curl.exe`. 
@@ -120,6 +125,10 @@ json
 ### 🐍 Python Project Actions
 * **Run:** Runs the selected Python entry point using the project's `.venv` or `venv` when present, then falls back to the system Python runtime.
 * **Build:** Uses a project `.spec` file when available; without one, builds a single-file executable from the selected `.py` entry point. Install PyInstaller in the interpreter environment used by the project before building.
+* **Check Python modules:** Statically scans project `.py` files and checks whether imported modules are available to the selected interpreter. It reports missing modules but does not install them.
+* **Install dependencies:** Runs `python -m pip install -r requirements.txt` using the project's virtual environment when present.
+* **Run tests:** Uses pytest when installed in that environment, otherwise runs `unittest` discovery. Test, Ruff lint, and Ruff formatting output is appended to `builder-python-tests.txt`; each run records its type and start time. Git repositories exclude this generated log locally without changing the project's tracked `.gitignore`.
+* **Ruff checks:** Runs `ruff check .` or `ruff format --check .`. If Ruff is missing, the Builder asks before installing it in the selected environment. Formatting is check-only and does not modify project files.
 * **Setup Wizard:** Installs Python through `winget` when it is missing. Creating a virtual environment also requires a working Python installation.
 
 ---

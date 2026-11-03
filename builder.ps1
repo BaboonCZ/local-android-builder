@@ -213,7 +213,7 @@ function Get-Text {
             RestoreBackup = "[R] RESTORE PROJECT FROM BACKUP (ZIP)"
             Settings      = "[S] BUILDER SETTINGS"
             Exit          = "[X] EXIT BUILDER"
-            UpdateBuilder = "[U] Update Builder from GitHub"
+            BuilderGitMenu = "[G] Builder Git sync"
             DevNick       = "Developer Nickname"
             LangSelect    = "Language"
             OpenJson      = "Open app.json"
@@ -361,6 +361,27 @@ function Get-Text {
             PythonEntryMissing = "No Python entry-point (.py) found in the project root."
             PythonBuildTitle = "=== BUILDING PYTHON EXECUTABLE ==="
             PythonBuildFailed = "Python build failed with exit code:"
+            PythonModulesCheck = "Check Python modules"
+            PythonModulesTitle = "=== CHECKING PYTHON MODULES ==="
+            PythonModulesOk = "[OK] All imported modules are available."
+            PythonModulesMissing = "Missing Python modules:"
+            PythonModuleCheckFailed = "[ERROR] Could not complete the Python module check:"
+            PythonInstallDeps = "Install dependencies (requirements.txt)"
+            PythonRequirementsMissing = "requirements.txt was not found in the project root."
+            PythonTests = "Run Python tests"
+            PythonTestsTitle = "=== RUNNING PYTHON TESTS ==="
+            PythonTestsWith = "Running tests with"
+            PythonTestsLogSaved = "Python check output saved to:"
+            PythonTestsLogWriteFailed = "Could not write the Python check log:"
+            PythonTestsLogIgnoreFailed = "Could not exclude the Python check log from Git:"
+            PythonRuffCheck = "Lint with Ruff"
+            PythonRuffFormat = "Check formatting with Ruff"
+            PythonRuffInstallPrompt = "Ruff is missing. Install it into this Python environment now? (Y/N)"
+            PythonRuffInstallCancelled = "Ruff installation cancelled."
+            PythonRuffInstalling = "Installing Ruff into the selected Python environment..."
+            PythonRuffInstallFailed = "Ruff installation failed with exit code:"
+            PythonRuffMissing = "Ruff is not installed in this Python environment."
+            PythonCommandFailed = "Command failed with exit code:"
             ProjectMenuTitle = "PROJECT: {0}"
             PackageMenuTitle = "PACKAGES ({0})"
             RestoreProjectName = "Project Name"
@@ -381,10 +402,22 @@ function Get-Text {
             SftpVersionUploaded = "[OK] version.json uploaded successfully."
             SftpDeployComplete = "[SUCCESS] Deployment complete! Remote update URL: {0}"
             SftpVersionUploadFailed = "[ERROR] Failed to upload version.json (code {0})."
-            UpdateBuilderTitle = "=== UPDATING BUILDER FROM GITHUB ==="
-            UpdateBuilderSuccess = "[OK] Builder.ps1 was updated successfully!"
-            UpdateBuilderRestart = "[INFO] Restarting Builder with the new version..."
-            UpdateBuilderFailed = "[ERROR] Failed to download the update from GitHub:"
+            BuilderGitTitle = "BUILDER GIT SYNC"
+            BuilderGitStatus = "Show Builder Git status"
+            BuilderGitCheckUpdates = "Review and download Builder updates"
+            BuilderGitRepoMissing = "Builder folder is not a Git repository:"
+            BuilderGitDirty = "Local changes detected. Commit or stash them before syncing:"
+            BuilderGitNoUpstream = "The current branch has no upstream configured."
+            BuilderGitFetch = "Checking the remote for updates..."
+            BuilderGitFetchFailed = "Could not fetch Builder updates:"
+            BuilderGitUpToDate = "Builder is up to date."
+            BuilderGitLocalAhead = "Builder has local commits not yet on the remote; there are no incoming updates."
+            BuilderGitIncoming = "Incoming commits:"
+            BuilderGitChanges = "Changes to be applied:"
+            BuilderGitDiverged = "Local and remote branches have diverged. No changes were applied."
+            BuilderGitConfirm = "Fast-forward the Builder to the upstream version? (Y/N)"
+            BuilderGitUpdated = "Builder updated. Restart it to use the new version."
+            BuilderGitSyncFailed = "Builder could not be updated:"
             WizardPathError = "[ERROR] The Builder directory could not be verified in PATH. The setup wizard cannot continue."
             WizardWingetMissing = "[ERROR] 'winget' is not installed or available in PATH!"
             WizardWingetInstall = "Install 'App Installer' from the Microsoft Store or install packages manually."
@@ -406,7 +439,7 @@ function Get-Text {
             RestoreBackup = "[R] OBNOVIT PROJEKT ZE ZÁLOHY (ZIP)"
             Settings      = "[S] NASTAVENÍ BUILDERU"
             Exit          = "[X] UKONČIT BUILDER"
-            UpdateBuilder = "[U] Aktualizovat Builder z GitHubu"
+            BuilderGitMenu = "[G] Git synchronizace Builderu"
             DevNick       = "Jméno vývojáře (Nick)"
             LangSelect    = "Jazyk (Language)"
             OpenJson      = "Otevírat app.json"
@@ -551,6 +584,27 @@ function Get-Text {
             PythonEntryMissing = "V kořenové složce projektu nebyl nalezen vstupní soubor .py."
             PythonBuildTitle = "=== SESTAVUJI PYTHON APLIKACI ==="
             PythonBuildFailed = "Sestavení Python aplikace selhalo s kódem:"
+            PythonModulesCheck = "Zkontrolovat Python moduly"
+            PythonModulesTitle = "=== KONTROLA PYTHON MODULŮ ==="
+            PythonModulesOk = "[OK] Všechny použité moduly jsou dostupné."
+            PythonModulesMissing = "Chybějící Python moduly:"
+            PythonModuleCheckFailed = "[CHYBA] Kontrolu Python modulů se nepodařilo dokončit:"
+            PythonInstallDeps = "Nainstalovat závislosti (requirements.txt)"
+            PythonRequirementsMissing = "V kořenové složce projektu nebyl nalezen requirements.txt."
+            PythonTests = "Spustit Python testy"
+            PythonTestsTitle = "=== SPOUŠTÍM PYTHON TESTY ==="
+            PythonTestsWith = "Testy spouštím pomocí"
+            PythonTestsLogSaved = "Výstup Python kontroly je uložen v:"
+            PythonTestsLogWriteFailed = "Soubor s výstupem Python kontroly se nepodařilo zapsat:"
+            PythonTestsLogIgnoreFailed = "Soubor s výstupem kontroly se nepodařilo vyloučit z Gitu:"
+            PythonRuffCheck = "Lintovat pomocí Ruff"
+            PythonRuffFormat = "Zkontrolovat formátování pomocí Ruff"
+            PythonRuffInstallPrompt = "Ruff není nainstalovaný. Nainstalovat jej do tohoto Python prostředí? (A/N)"
+            PythonRuffInstallCancelled = "Instalace Ruffu byla zrušena."
+            PythonRuffInstalling = "Instaluji Ruff do vybraného Python prostředí..."
+            PythonRuffInstallFailed = "Instalace Ruffu selhala s kódem:"
+            PythonRuffMissing = "Ruff v tomto Python prostředí není nainstalovaný."
+            PythonCommandFailed = "Příkaz skončil s kódem:"
             ProjectMenuTitle = "PROJEKT: {0}"
             PackageMenuTitle = "BALÍČKY ({0})"
             RestoreProjectName = "Název projektu"
@@ -571,10 +625,22 @@ function Get-Text {
             SftpVersionUploaded = "[OK] Soubor version.json byl úspěšně nahrán."
             SftpDeployComplete = "[HOTOVO] Nasazení dokončeno! Vzdálená URL aktualizace: {0}"
             SftpVersionUploadFailed = "[CHYBA] Nahrání version.json selhalo (kód {0})."
-            UpdateBuilderTitle = "=== AKTUALIZUJI BUILDER Z GITHUBU ==="
-            UpdateBuilderSuccess = "[OK] Builder.ps1 byl úspěšně aktualizován!"
-            UpdateBuilderRestart = "[INFO] Restartuji Builder s novou verzí..."
-            UpdateBuilderFailed = "[CHYBA] Stažení aktualizace z GitHubu selhalo:"
+            BuilderGitTitle = "GIT SYNCHRONIZACE BUILDERU"
+            BuilderGitStatus = "Zobrazit stav Gitu Builderu"
+            BuilderGitCheckUpdates = "Zkontrolovat a stáhnout změny Builderu"
+            BuilderGitRepoMissing = "Složka Builderu není Git repozitář:"
+            BuilderGitDirty = "Byly nalezeny místní změny. Před synchronizací je commitni nebo odlož:"
+            BuilderGitNoUpstream = "Aktuální větev nemá nastavený vzdálený upstream."
+            BuilderGitFetch = "Kontroluji vzdálené změny..."
+            BuilderGitFetchFailed = "Změny Builderu se nepodařilo načíst:"
+            BuilderGitUpToDate = "Builder je aktuální."
+            BuilderGitLocalAhead = "Builder má místní commity, které ještě nejsou na serveru; nové vzdálené změny nejsou."
+            BuilderGitIncoming = "Příchozí commity:"
+            BuilderGitChanges = "Změny k převzetí:"
+            BuilderGitDiverged = "Místní a vzdálená větev se rozešly. Žádné změny nebyly provedeny."
+            BuilderGitConfirm = "Posunout Builder bezpečně na vzdálenou verzi? (A/N)"
+            BuilderGitUpdated = "Builder byl aktualizován. Nová verze se použije po jeho opětovném spuštění."
+            BuilderGitSyncFailed = "Builder se nepodařilo aktualizovat:"
             WizardPathError = "[CHYBA] Cestu Builderu se nepodařilo ověřit v PATH. Průvodce instalací nemůže pokračovat."
             WizardWingetMissing = "[CHYBA] Nástroj 'winget' není nainstalován nebo dostupný v PATH!"
             WizardWingetInstall = "Nainstaluj 'App Installer' z Microsoft Store nebo balíčky nainstaluj ručně."
@@ -596,7 +662,7 @@ function Get-Text {
             RestoreBackup = "[R] PROJEKT AUS BACKUP WIEDERHERSTELLEN (ZIP)"
             Settings      = "[S] BUILDER-EINSTELLUNGEN"
             Exit          = "[X] BUILDER BEENDEN"
-            UpdateBuilder = "[U] Builder von GitHub aktualisieren"
+            BuilderGitMenu = "[G] Builder-Git-Synchronisierung"
             DevNick       = "Entwickler-Name (Nick)"
             LangSelect    = "Sprache (Language)"
             OpenJson      = "app.json öffnen"
@@ -741,6 +807,27 @@ function Get-Text {
             PythonEntryMissing = "Keine Python-Einstiegsdatei (.py) im Projektstamm gefunden."
             PythonBuildTitle = "=== PYTHON-ANWENDUNG WIRD ERSTELLT ==="
             PythonBuildFailed = "Erstellen der Python-Anwendung fehlgeschlagen, Exitcode:"
+            PythonModulesCheck = "Python-Module überprüfen"
+            PythonModulesTitle = "=== PYTHON-MODULE WERDEN ÜBERPRÜFT ==="
+            PythonModulesOk = "[OK] Alle importierten Module sind verfügbar."
+            PythonModulesMissing = "Fehlende Python-Module:"
+            PythonModuleCheckFailed = "[FEHLER] Python-Modulprüfung konnte nicht abgeschlossen werden:"
+            PythonInstallDeps = "Abhängigkeiten installieren (requirements.txt)"
+            PythonRequirementsMissing = "requirements.txt wurde im Projektstamm nicht gefunden."
+            PythonTests = "Python-Tests ausführen"
+            PythonTestsTitle = "=== PYTHON-TESTS WERDEN AUSGEFÜHRT ==="
+            PythonTestsWith = "Tests werden ausgeführt mit"
+            PythonTestsLogSaved = "Python-Prüfausgabe gespeichert unter:"
+            PythonTestsLogWriteFailed = "Python-Prüflog konnte nicht gespeichert werden:"
+            PythonTestsLogIgnoreFailed = "Prüflog konnte nicht von Git ausgeschlossen werden:"
+            PythonRuffCheck = "Mit Ruff linten"
+            PythonRuffFormat = "Formatierung mit Ruff überprüfen"
+            PythonRuffInstallPrompt = "Ruff ist nicht installiert. Jetzt in dieser Python-Umgebung installieren? (J/N)"
+            PythonRuffInstallCancelled = "Ruff-Installation abgebrochen."
+            PythonRuffInstalling = "Ruff wird in der ausgewählten Python-Umgebung installiert..."
+            PythonRuffInstallFailed = "Ruff-Installation mit Exitcode fehlgeschlagen:"
+            PythonRuffMissing = "Ruff ist in dieser Python-Umgebung nicht installiert."
+            PythonCommandFailed = "Befehl mit Exitcode fehlgeschlagen:"
             ProjectMenuTitle = "PROJEKT: {0}"
             PackageMenuTitle = "PAKETE ({0})"
             RestoreProjectName = "Projektname"
@@ -761,10 +848,22 @@ function Get-Text {
             SftpVersionUploaded = "[OK] version.json erfolgreich hochgeladen."
             SftpDeployComplete = "[ERFOLG] Deployment abgeschlossen! Remote-Update-URL: {0}"
             SftpVersionUploadFailed = "[FEHLER] Upload von version.json fehlgeschlagen (Code {0})."
-            UpdateBuilderTitle = "=== BUILDER WIRD VON GITHUB AKTUALISIERT ==="
-            UpdateBuilderSuccess = "[OK] Builder.ps1 wurde erfolgreich aktualisiert!"
-            UpdateBuilderRestart = "[INFO] Builder wird mit der neuen Version neu gestartet..."
-            UpdateBuilderFailed = "[FEHLER] Download des Updates von GitHub fehlgeschlagen:"
+            BuilderGitTitle = "BUILDER-GIT-SYNCHRONISIERUNG"
+            BuilderGitStatus = "Builder-Git-Status anzeigen"
+            BuilderGitCheckUpdates = "Builder-Änderungen prüfen und übernehmen"
+            BuilderGitRepoMissing = "Der Builder-Ordner ist kein Git-Repository:"
+            BuilderGitDirty = "Lokale Änderungen gefunden. Vor der Synchronisierung committen oder zwischenspeichern:"
+            BuilderGitNoUpstream = "Für den aktuellen Branch ist kein Upstream konfiguriert."
+            BuilderGitFetch = "Remote-Änderungen werden geprüft..."
+            BuilderGitFetchFailed = "Builder-Änderungen konnten nicht abgerufen werden:"
+            BuilderGitUpToDate = "Der Builder ist aktuell."
+            BuilderGitLocalAhead = "Der Builder enthält lokale Commits, die noch nicht remote sind; es gibt keine eingehenden Änderungen."
+            BuilderGitIncoming = "Eingehende Commits:"
+            BuilderGitChanges = "Zu übernehmende Änderungen:"
+            BuilderGitDiverged = "Lokaler und Remote-Branch sind auseinander gelaufen. Es wurden keine Änderungen übernommen."
+            BuilderGitConfirm = "Builder sicher auf die Remote-Version vorspulen? (J/N)"
+            BuilderGitUpdated = "Builder aktualisiert. Zum Verwenden der neuen Version neu starten."
+            BuilderGitSyncFailed = "Builder konnte nicht aktualisiert werden:"
             WizardPathError = "[FEHLER] Das Builder-Verzeichnis konnte nicht in PATH bestätigt werden. Der Setup-Assistent kann nicht fortfahren."
             WizardWingetMissing = "[FEHLER] 'winget' ist nicht installiert oder nicht über PATH verfügbar!"
             WizardWingetInstall = "Installieren Sie 'App Installer' aus dem Microsoft Store oder installieren Sie die Pakete manuell."
@@ -1123,6 +1222,127 @@ function Show-GitHub {
     }
 }
 
+function Invoke-BuilderGitUpdate {
+    param ([string]$BuilderPath, [string]$Lang)
+
+    $gitCommand = Get-Command "git" -ErrorAction SilentlyContinue
+    if (-not $gitCommand) {
+        Write-Host "Git is not installed or available in PATH." -ForegroundColor Red
+        return
+    }
+
+    $worktreeChanges = @(& $gitCommand.Source -C $BuilderPath status --porcelain --untracked-files=normal 2>&1)
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "$(Get-Text 'BuilderGitSyncFailed' $Lang) $($worktreeChanges -join ' ')" -ForegroundColor Red
+        return
+    }
+    if ($worktreeChanges.Count -gt 0) {
+        Write-Host (Get-Text 'BuilderGitDirty' $Lang) -ForegroundColor Yellow
+        $worktreeChanges | ForEach-Object { Write-Host "  $_" }
+        return
+    }
+
+    $upstreamOutput = @(& $gitCommand.Source -C $BuilderPath rev-parse --abbrev-ref --symbolic-full-name '@{u}' 2>&1)
+    if ($LASTEXITCODE -ne 0 -or $upstreamOutput.Count -eq 0) {
+        Write-Host (Get-Text 'BuilderGitNoUpstream' $Lang) -ForegroundColor Yellow
+        return
+    }
+
+    $upstream = $upstreamOutput[-1].ToString().Trim()
+    Write-Host (Get-Text 'BuilderGitFetch' $Lang) -ForegroundColor Cyan
+    $fetchOutput = @(& $gitCommand.Source -C $BuilderPath fetch --prune 2>&1)
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "$(Get-Text 'BuilderGitFetchFailed' $Lang) $($fetchOutput -join ' ')" -ForegroundColor Red
+        return
+    }
+
+    $counts = @(& $gitCommand.Source -C $BuilderPath rev-list --left-right --count "HEAD...$upstream" 2>&1)
+    if ($LASTEXITCODE -ne 0 -or $counts.Count -eq 0) {
+        Write-Host "$(Get-Text 'BuilderGitSyncFailed' $Lang) $($counts -join ' ')" -ForegroundColor Red
+        return
+    }
+
+    $countParts = $counts[-1].ToString().Trim() -split '\s+'
+    $aheadCount = [int]$countParts[0]
+    $behindCount = [int]$countParts[1]
+    if ($behindCount -eq 0 -and $aheadCount -eq 0) {
+        Write-Host (Get-Text 'BuilderGitUpToDate' $Lang) -ForegroundColor Green
+        return
+    }
+    if ($behindCount -eq 0) {
+        Write-Host (Get-Text 'BuilderGitLocalAhead' $Lang) -ForegroundColor Yellow
+        return
+    }
+    if ($aheadCount -gt 0) {
+        Write-Host (Get-Text 'BuilderGitDiverged' $Lang) -ForegroundColor Yellow
+        return
+    }
+
+    Write-Host (Get-Text 'BuilderGitIncoming' $Lang) -ForegroundColor Cyan
+    & $gitCommand.Source -C $BuilderPath log --oneline "HEAD..$upstream"
+    Write-Host "`n$(Get-Text 'BuilderGitChanges' $Lang)" -ForegroundColor Cyan
+    & $gitCommand.Source -C $BuilderPath diff --stat "HEAD..$upstream"
+
+    $confirmation = Read-Host (Get-Text 'BuilderGitConfirm' $Lang)
+    if ($confirmation -notmatch '^(?i:Y|YES|A|ANO|J|JA)$') { return }
+
+    $mergeOutput = @(& $gitCommand.Source -C $BuilderPath merge --ff-only $upstream 2>&1)
+    if ($LASTEXITCODE -eq 0) {
+        $mergeOutput | ForEach-Object { Write-Host $_ }
+        Write-Host (Get-Text 'BuilderGitUpdated' $Lang) -ForegroundColor Green
+    } else {
+        Write-Host "$(Get-Text 'BuilderGitSyncFailed' $Lang) $($mergeOutput -join ' ')" -ForegroundColor Red
+    }
+}
+
+function Show-BuilderGitMenu {
+    param ([string]$BuilderPath)
+
+    $gitCommand = Get-Command "git" -ErrorAction SilentlyContinue
+    if (-not $gitCommand) {
+        Write-Host "Git is not installed or available in PATH." -ForegroundColor Red
+        return
+    }
+
+    $cfg = Get-Config
+    $L = $cfg.Language
+    $builderPath = [System.IO.Path]::GetFullPath($BuilderPath)
+    $repoRootOutput = @(& $gitCommand.Source -C $builderPath rev-parse --show-toplevel 2>$null)
+    if ($LASTEXITCODE -ne 0 -or $repoRootOutput.Count -eq 0) {
+        Write-Host "$(Get-Text 'BuilderGitRepoMissing' $L) $builderPath" -ForegroundColor Red
+        return
+    }
+    $repoRoot = [System.IO.Path]::GetFullPath($repoRootOutput[-1].ToString().Trim())
+    if (-not [string]::Equals($repoRoot.TrimEnd('\'), $builderPath.TrimEnd('\'), [System.StringComparison]::OrdinalIgnoreCase)) {
+        Write-Host "$(Get-Text 'BuilderGitRepoMissing' $L) $builderPath" -ForegroundColor Red
+        return
+    }
+
+    while ($true) {
+        $opts = @(
+            (Get-Text 'BuilderGitStatus' $L),
+            (Get-Text 'BuilderGitCheckUpdates' $L),
+            (Get-Text 'Back' $L)
+        )
+        $idx = Show-Menu -Title (Get-Text 'BuilderGitTitle' $L) -Options $opts -InitialIndex $global:gitMenuIndex
+        if ($idx -lt 0 -or $idx -eq ($opts.Count - 1)) { return }
+        $global:gitMenuIndex = $idx
+        Clear-Host
+
+        if ($idx -eq 0) {
+            & $gitCommand.Source -C $builderPath status --short --branch
+            if ($LASTEXITCODE -ne 0) {
+                Write-Host "$(Get-Text 'BuilderGitSyncFailed' $L) $LASTEXITCODE" -ForegroundColor Red
+            }
+        } else {
+            Invoke-BuilderGitUpdate -BuilderPath $builderPath -Lang $L
+        }
+
+        Write-Host "`n$(Get-Text 'PressKey' $L)" -ForegroundColor Gray
+        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+    }
+}
+
 function Save-Config ($cfg) {
     $sb = New-Object System.Text.StringBuilder
     foreach ($k in $cfg.Keys) {
@@ -1164,8 +1384,9 @@ function Get-ProjectType {
         foreach ($line in (Get-Content $projIni)) {
             if ($line -match '^\s*ProjectType\s*=\s*(.*)\s*$') {
                 $configuredType = $matches[1].Trim().ToLower()
-                if ($configuredType -and $configuredType -ne "unknown") {
-                    return $configuredType
+                switch ($configuredType) {
+                    "phyton" { return "python" }
+                    { $_ -in @("expo", "nodejs", "python") } { return $configuredType }
                 }
                 break
             }
@@ -1257,6 +1478,222 @@ function Get-PythonBuildArguments {
     }
 
     return @($Runtime.Prefix) + @("-m", "PyInstaller", "--onefile", $EntryPoint)
+}
+
+function Test-PythonProjectModules {
+    param ([string]$ProjectPath, [hashtable]$Runtime)
+
+    $moduleCheckScript = @'
+import ast
+import importlib.util
+import json
+import os
+import sys
+
+root = os.path.abspath(sys.argv[1])
+sys.path.insert(0, root)
+imports = set()
+parse_errors = []
+ignored_dirs = {".venv", "venv", "build", "dist", "__pycache__"}
+
+for current, directories, files in os.walk(root):
+    directories[:] = [name for name in directories if name not in ignored_dirs]
+    for filename in files:
+        if not filename.endswith(".py"):
+            continue
+        path = os.path.join(current, filename)
+        try:
+            with open(path, encoding="utf-8-sig") as source_file:
+                tree = ast.parse(source_file.read(), filename=path)
+        except (OSError, UnicodeError, SyntaxError) as error:
+            parse_errors.append("{}: {}".format(os.path.relpath(path, root), error))
+            continue
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                imports.update(alias.name.split(".", 1)[0] for alias in node.names)
+            elif isinstance(node, ast.ImportFrom) and node.level == 0 and node.module:
+                imports.add(node.module.split(".", 1)[0])
+
+missing = []
+for name in sorted(imports):
+    try:
+        available = importlib.util.find_spec(name) is not None
+    except (ImportError, ModuleNotFoundError, ValueError):
+        available = False
+    if not available:
+        missing.append(name)
+
+print(json.dumps({"missing": missing, "parse_errors": parse_errors}))
+sys.exit(2 if parse_errors else 1 if missing else 0)
+'@
+
+    $output = @(& $Runtime.Path @($Runtime.Prefix) -c $moduleCheckScript $ProjectPath 2>&1)
+    $exitCode = $LASTEXITCODE
+    try {
+        $result = ($output -join "`n") | ConvertFrom-Json -ErrorAction Stop
+    } catch {
+        Write-Host (Get-Text 'PythonModuleCheckFailed' $global:currentLanguage) -ForegroundColor Red
+        $output | ForEach-Object { Write-Host $_ -ForegroundColor DarkGray }
+        return
+    }
+
+    if ($result.parse_errors.Count -gt 0) {
+        Write-Host (Get-Text 'PythonModuleCheckFailed' $global:currentLanguage) -ForegroundColor Red
+        $result.parse_errors | ForEach-Object { Write-Host "  $_" -ForegroundColor Yellow }
+        return
+    }
+    if ($exitCode -ge 2) {
+        Write-Host (Get-Text 'PythonModuleCheckFailed' $global:currentLanguage) -ForegroundColor Red
+        return
+    }
+    if ($result.missing.Count -gt 0) {
+        Write-Host (Get-Text 'PythonModulesMissing' $global:currentLanguage) -ForegroundColor Yellow
+        $result.missing | ForEach-Object { Write-Host "  $_" -ForegroundColor Yellow }
+        return
+    }
+
+    Write-Host (Get-Text 'PythonModulesOk' $global:currentLanguage) -ForegroundColor Green
+}
+
+function Add-PythonTestLogToGitExclude {
+    param ([string]$ProjectPath, [string]$LogPath, [string]$Lang)
+
+    $gitCommand = Get-Command "git" -ErrorAction SilentlyContinue
+    if (-not $gitCommand) { return }
+
+    $repoRootOutput = @(& $gitCommand.Source -C $ProjectPath rev-parse --show-toplevel 2>$null)
+    if ($LASTEXITCODE -ne 0 -or $repoRootOutput.Count -eq 0) { return }
+    $repoRoot = $repoRootOutput[-1].ToString().Trim()
+    $projectRoot = [System.IO.Path]::GetFullPath($ProjectPath).TrimEnd('\')
+    $repoRoot = [System.IO.Path]::GetFullPath($repoRoot).TrimEnd('\')
+    if (-not [string]::Equals($repoRoot, $projectRoot, [System.StringComparison]::OrdinalIgnoreCase)) {
+        return
+    }
+
+    $excludeOutput = @(& $gitCommand.Source -C $repoRoot rev-parse --git-path info/exclude 2>&1)
+    if ($LASTEXITCODE -ne 0 -or $excludeOutput.Count -eq 0) {
+        Write-Host "$(Get-Text 'PythonTestsLogIgnoreFailed' $Lang) $($excludeOutput -join ' ')" -ForegroundColor Yellow
+        return
+    }
+
+    $excludePath = $excludeOutput[-1].ToString().Trim()
+    if (-not [System.IO.Path]::IsPathRooted($excludePath)) {
+        $excludePath = Join-Path $repoRoot $excludePath
+    }
+    $relativeLogPath = [System.IO.Path]::GetRelativePath($repoRoot, $LogPath).Replace('\', '/')
+    $excludePattern = "/$relativeLogPath"
+
+    try {
+        $excludeDirectory = Split-Path -Parent $excludePath
+        if (-not (Test-Path $excludeDirectory)) {
+            New-Item -ItemType Directory -Path $excludeDirectory -Force -ErrorAction Stop | Out-Null
+        }
+        $excludeLines = if (Test-Path $excludePath) { @(Get-Content -LiteralPath $excludePath -ErrorAction Stop) } else { @() }
+        if ($excludeLines -notcontains $excludePattern) {
+            Add-Content -LiteralPath $excludePath -Value $excludePattern -Encoding UTF8 -ErrorAction Stop
+        }
+    } catch {
+        Write-Host "$(Get-Text 'PythonTestsLogIgnoreFailed' $Lang) $_" -ForegroundColor Yellow
+    }
+}
+
+function Invoke-PythonRuff {
+    param ([string]$ProjectPath, [hashtable]$Runtime, [string[]]$RuffArguments, [string]$Lang)
+
+    $ruffProbe = "import importlib.util, sys; sys.exit(0 if importlib.util.find_spec('ruff') else 1)"
+    & $Runtime.Path @($Runtime.Prefix) -c $ruffProbe
+    $probeExitCode = $LASTEXITCODE
+
+    if ($probeExitCode -eq 1) {
+        Write-Host (Get-Text 'PythonRuffMissing' $Lang) -ForegroundColor Yellow
+        $confirmation = Read-Host (Get-Text 'PythonRuffInstallPrompt' $Lang)
+        if ($confirmation -notmatch '^(Y|YES|A|ANO|J|JA)$') {
+            Write-Host (Get-Text 'PythonRuffInstallCancelled' $Lang) -ForegroundColor Yellow
+            return
+        }
+
+        Write-Host (Get-Text 'PythonRuffInstalling' $Lang) -ForegroundColor Cyan
+        & $Runtime.Path @($Runtime.Prefix) -m pip install ruff
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "$(Get-Text 'PythonRuffInstallFailed' $Lang) $LASTEXITCODE" -ForegroundColor Red
+            return
+        }
+    } elseif ($probeExitCode -ne 0) {
+        Write-Host "$(Get-Text 'PythonCommandFailed' $Lang) $probeExitCode" -ForegroundColor Red
+        return
+    }
+
+    $checkType = if ($RuffArguments[0] -eq "format") { "Ruff format check (ruff format --check .)" } else { "Ruff lint (ruff check .)" }
+    $pythonArgs = @($Runtime.Prefix) + @("-m", "ruff") + $RuffArguments
+    Invoke-PythonLoggedCommand -ProjectPath $ProjectPath -Runtime $Runtime -PythonArguments $pythonArgs -CheckType $checkType -Lang $Lang
+}
+
+function Invoke-PythonLoggedCommand {
+    param (
+        [string]$ProjectPath,
+        [hashtable]$Runtime,
+        [string[]]$PythonArguments,
+        [string]$CheckType,
+        [string]$Lang
+    )
+
+    $logPath = Join-Path $ProjectPath "builder-python-tests.txt"
+    Add-PythonTestLogToGitExclude -ProjectPath $ProjectPath -LogPath $logPath -Lang $Lang
+    $logHeader = @(
+        "========================================"
+        "Type: $CheckType"
+        "Started: $(Get-Date -Format o)"
+        "Project: $ProjectPath"
+        "Interpreter: $($Runtime.Path)"
+        "Command: $($PythonArguments -join ' ')"
+        "========================================"
+        ""
+    ) -join [Environment]::NewLine
+    $canWriteLog = $true
+    try {
+        [System.IO.File]::AppendAllText($logPath, $logHeader + [Environment]::NewLine, (New-Object System.Text.UTF8Encoding $false))
+    } catch {
+        Write-Host "$(Get-Text 'PythonTestsLogWriteFailed' $Lang) $_" -ForegroundColor Yellow
+        $canWriteLog = $false
+    }
+
+    Push-Location -LiteralPath $ProjectPath
+    try {
+        if ($canWriteLog) {
+            & $Runtime.Path @PythonArguments 2>&1 | Tee-Object -FilePath $logPath -Append
+            $commandExitCode = $LASTEXITCODE
+            Write-Host "$(Get-Text 'PythonTestsLogSaved' $Lang) $logPath" -ForegroundColor Cyan
+        } else {
+            & $Runtime.Path @PythonArguments
+            $commandExitCode = $LASTEXITCODE
+        }
+    } finally {
+        Pop-Location
+    }
+    if ($commandExitCode -ne 0) {
+        Write-Host "$(Get-Text 'PythonCommandFailed' $Lang) $commandExitCode" -ForegroundColor Red
+    }
+}
+
+function Invoke-PythonProjectTests {
+    param ([string]$ProjectPath, [hashtable]$Runtime, [string]$Lang)
+
+    $testRunnerCheck = "import importlib.util, sys; sys.exit(0 if importlib.util.find_spec('pytest') else 1)"
+    & $Runtime.Path @($Runtime.Prefix) -c $testRunnerCheck
+    $testRunnerCheckExitCode = $LASTEXITCODE
+    if ($testRunnerCheckExitCode -eq 0) {
+        $testRunner = "pytest"
+        $pythonArgs = @($Runtime.Prefix) + @("-m", "pytest")
+    } elseif ($testRunnerCheckExitCode -eq 1) {
+        $testRunner = "unittest"
+        $pythonArgs = @($Runtime.Prefix) + @("-m", "unittest", "discover")
+    } else {
+        Write-Host "$(Get-Text 'PythonCommandFailed' $Lang) $testRunnerCheckExitCode" -ForegroundColor Red
+        return
+    }
+
+    Write-Host "$(Get-Text 'PythonTestsWith' $Lang) $testRunner..."
+    Invoke-PythonLoggedCommand -ProjectPath $ProjectPath -Runtime $Runtime -PythonArguments $pythonArgs -CheckType "Python tests ($testRunner)" -Lang $Lang
 }
 
 function Select-PythonEntryPoint {
@@ -1405,44 +1842,6 @@ function Open-InNotepadPlusPlus {
     if ($filesToOpen.Count -gt 0) {
         Start-Process -FilePath $exe -ArgumentList $filesToOpen
         Write-Host "`n$(Get-Text 'OpenNpp' $Lang)" -ForegroundColor Green
-    }
-}
-
-function Update-SelfFromGitHub {
-    $cfg = Get-Config
-    $L = $cfg.Language
-
-    Write-Host "`n$(Get-Text 'UpdateBuilderTitle' $L)" -ForegroundColor Cyan
-    Write-Host "$(Get-Text 'RepositoryLabel' $L): BaboonCZ/local-android-builder`n" -ForegroundColor Gray
-
-    $runningScriptPath = $PSCommandPath
-    if ([string]::IsNullOrWhiteSpace($runningScriptPath)) { $runningScriptPath = $selfScriptPath }
-
-    $rawUrl = "https://raw.githubusercontent.com/BaboonCZ/local-android-builder/main/builder.ps1"
-    $tempFile = Join-Path $env:TEMP "builder_update.ps1"
-
-    try {
-        # 1. Stažení aktuálního kódu
-        Invoke-WebRequest -Uri $rawUrl -OutFile $tempFile -UseBasicParsing -ErrorAction Stop
-
-        if (Test-Path $tempFile) {
-            # 2. Přepsání běžeckého souboru na disku
-            Copy-Item -Path $tempFile -Destination $runningScriptPath -Force
-            Remove-Item $tempFile -Force -ErrorAction SilentlyContinue
-
-            Write-Host "$(Get-Text 'UpdateBuilderSuccess' $L)" -ForegroundColor Green
-            Write-Host "$(Get-Text 'UpdateBuilderRestart' $L)" -ForegroundColor Yellow
-            Start-Sleep -Seconds 1
-
-            # 3. Otevření nového okna s novou verzí a ukončení starého procesu
-            Start-Process powershell -ArgumentList "-ExecutionPolicy Bypass -NoProfile -File `"$runningScriptPath`""
-            exit
-        }
-    }
-    catch {
-        Write-Host "$(Get-Text 'UpdateBuilderFailed' $L) $_" -ForegroundColor Red
-        Write-Host "`n$(Get-Text 'PressKey' $L)" -ForegroundColor Gray
-        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
     }
 }
 
@@ -2162,7 +2561,7 @@ function Show-ConfigMenu {
             ("{0,-32} : {1}"   -f $(Get-Text 'DevNick' $L), $cfg.Nick),
             ("{0,-32} : [{1}]" -f $(Get-Text 'LangSelect' $L), $cfg.Language),
             ("{0,-32} : {1}"   -f $(Get-Text 'KeystorePath' $L), $cfg.KeystorePath),
-            "$(Get-Text 'UpdateBuilder' $L)",
+            "$(Get-Text 'BuilderGitMenu' $L)",
             "$(Get-Text 'SftpSettings' $L)",
             "$(Get-Text 'WizardSettings' $L)",
             "$(Get-Text 'Back' $L)"
@@ -2245,8 +2644,8 @@ function Show-ConfigMenu {
                     Save-Config $cfg
                 }
             }
-            "$(Get-Text 'UpdateBuilder' $L)" { 
-                Update-SelfFromGitHub 
+            "$(Get-Text 'BuilderGitMenu' $L)" {
+                Show-BuilderGitMenu -BuilderPath $scriptDir
             }
             (Get-Text 'SftpSettings' $L) {
                 Show-SetupSFTP 
@@ -2548,6 +2947,11 @@ while ($true) {
             if ($pType -eq "python") {
                 "$(Get-Text 'PythonRun' $L)"
                 "$(Get-Text 'PythonBuild' $L)"
+                "$(Get-Text 'PythonModulesCheck' $L)"
+                "$(Get-Text 'PythonInstallDeps' $L)"
+                "$(Get-Text 'PythonTests' $L)"
+                "$(Get-Text 'PythonRuffCheck' $L)"
+                "$(Get-Text 'PythonRuffFormat' $L)"
             }
             if ($isGitInstalled) {
                 "$(Get-Text 'GitHubAction' $L)"
@@ -2628,6 +3032,55 @@ while ($true) {
                     if ($LASTEXITCODE -ne 0) {
                         Write-Host "`n$(Get-Text 'PythonBuildFailed' $L) $LASTEXITCODE" -ForegroundColor Red
                     }
+                }
+            }
+            "$(Get-Text 'PythonModulesCheck' $L)" {
+                Write-Host (Get-Text 'PythonModulesTitle' $L) -ForegroundColor Cyan
+                $python = Get-PythonRuntime -ProjectPath $projectPath
+                if (-not $python) {
+                    Write-Host (Get-Text 'PythonRuntimeMissing' $L) -ForegroundColor Red
+                } else {
+                    Test-PythonProjectModules -ProjectPath $projectPath -Runtime $python
+                }
+            }
+            "$(Get-Text 'PythonInstallDeps' $L)" {
+                $python = Get-PythonRuntime -ProjectPath $projectPath
+                $requirementsPath = Join-Path $projectPath "requirements.txt"
+                if (-not $python) {
+                    Write-Host (Get-Text 'PythonRuntimeMissing' $L) -ForegroundColor Red
+                } elseif (-not (Test-Path $requirementsPath -PathType Leaf)) {
+                    Write-Host (Get-Text 'PythonRequirementsMissing' $L) -ForegroundColor Yellow
+                } else {
+                    $pythonArgs = @($python.Prefix) + @("-m", "pip", "install", "-r", $requirementsPath)
+                    & $python.Path @pythonArgs
+                    if ($LASTEXITCODE -ne 0) {
+                        Write-Host "$(Get-Text 'PythonCommandFailed' $L) $LASTEXITCODE" -ForegroundColor Red
+                    }
+                }
+            }
+            "$(Get-Text 'PythonTests' $L)" {
+                Write-Host (Get-Text 'PythonTestsTitle' $L) -ForegroundColor Cyan
+                $python = Get-PythonRuntime -ProjectPath $projectPath
+                if (-not $python) {
+                    Write-Host (Get-Text 'PythonRuntimeMissing' $L) -ForegroundColor Red
+                } else {
+                    Invoke-PythonProjectTests -ProjectPath $projectPath -Runtime $python -Lang $L
+                }
+            }
+            "$(Get-Text 'PythonRuffCheck' $L)" {
+                $python = Get-PythonRuntime -ProjectPath $projectPath
+                if (-not $python) {
+                    Write-Host (Get-Text 'PythonRuntimeMissing' $L) -ForegroundColor Red
+                } else {
+                    Invoke-PythonRuff -ProjectPath $projectPath -Runtime $python -RuffArguments @("check", ".") -Lang $L
+                }
+            }
+            "$(Get-Text 'PythonRuffFormat' $L)" {
+                $python = Get-PythonRuntime -ProjectPath $projectPath
+                if (-not $python) {
+                    Write-Host (Get-Text 'PythonRuntimeMissing' $L) -ForegroundColor Red
+                } else {
+                    Invoke-PythonRuff -ProjectPath $projectPath -Runtime $python -RuffArguments @("format", "--check", ".") -Lang $L
                 }
             }
             "$(Get-Text 'Act1' $L)"{
