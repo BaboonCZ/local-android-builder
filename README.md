@@ -123,13 +123,20 @@ json
 * **Build App Bundle (.aab):** Increments `versionCode`, builds a production AAB for Google Play, and triggers an automated source backup.
 
 ### 🐍 Python Project Actions
-* **Run:** Runs the selected Python entry point using the project's `.venv` or `venv` when present, then falls back to the system Python runtime.
+* **Run:** Uses a statically identifiable entry point from the project's PyInstaller `.spec` file when available, without executing the `.spec` file. If multiple entry points are found, select one; if they cannot be determined, the Builder displays a warning and asks you to select a Python file. The project runs in its `.venv` or `venv` when present, otherwise in the system Python runtime. PyInstaller build options, such as UAC elevation, do not apply to a direct Python run. A successful run returns directly to the menu; errors remain visible.
 * **Build:** Uses a project `.spec` file when available; without one, builds a single-file executable from the selected `.py` entry point. Install PyInstaller in the interpreter environment used by the project before building.
 * **Check Python modules:** Statically scans project `.py` files and checks whether imported modules are available to the selected interpreter. It reports missing modules but does not install them.
 * **Install dependencies:** Runs `python -m pip install -r requirements.txt` using the project's virtual environment when present.
 * **Run tests:** Uses pytest when installed in that environment, otherwise runs `unittest` discovery. Test, Ruff lint, and Ruff formatting output is appended to `builder-python-tests.txt`; each run records its type and start time. Git repositories exclude this generated log locally without changing the project's tracked `.gitignore`.
 * **Ruff checks:** Runs `ruff check .` or `ruff format --check .`. If Ruff is missing, the Builder asks before installing it in the selected environment. Formatting is check-only and does not modify project files.
 * **Setup Wizard:** Installs Python through `winget` when it is missing. Creating a virtual environment also requires a working Python installation.
+
+### Development Tests
+Run the Python entry-point regression tests with Python 3 available in `PATH`:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\PythonEntryPoint.Tests.ps1
+```
 
 ---
 

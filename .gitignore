@@ -6,3 +6,6 @@
 !/README.md
 !/.gitignore
 !/LICENSE
+!/tests/
+/tests/*
+!/tests/PythonEntryPoint.Tests.ps1

@@ -359,6 +359,11 @@ function Get-Text {
             PythonBuild = "Build Python executable (PyInstaller)"
             PythonRuntimeMissing = "Python was not found. Install Python and ensure it is available in PATH."
             PythonEntryMissing = "No Python entry-point (.py) found in the project root."
+            PythonEntrySelectTitle = "SELECT PYTHON ENTRY POINT"
+            PythonEntrySelectionFailed = "The Python entry point could not be selected."
+            PythonSpecFallback = "[WARNING] Could not determine the entry point from the .spec file(s). Select a Python file:"
+            PythonProcessLaunchFailed = "Could not start Python:"
+            PythonRunFailed = "Python project exited with code:"
             PythonBuildTitle = "=== BUILDING PYTHON EXECUTABLE ==="
             PythonBuildFailed = "Python build failed with exit code:"
             PythonModulesCheck = "Check Python modules"
@@ -582,6 +587,11 @@ function Get-Text {
             PythonBuild = "Sestavit Python aplikaci (PyInstaller)"
             PythonRuntimeMissing = "Python nebyl nalezen. Nainstaluj Python a přidej jej do PATH."
             PythonEntryMissing = "V kořenové složce projektu nebyl nalezen vstupní soubor .py."
+            PythonEntrySelectTitle = "VYBER VSTUPNÍ PYTHON SOUBOR"
+            PythonEntrySelectionFailed = "Vstupní Python soubor se nepodařilo vybrat."
+            PythonSpecFallback = "[VAROVÁNÍ] Vstupní soubor nelze určit ze souborů .spec. Vyber Python soubor:"
+            PythonProcessLaunchFailed = "Python se nepodařilo spustit:"
+            PythonRunFailed = "Python projekt skončil s kódem:"
             PythonBuildTitle = "=== SESTAVUJI PYTHON APLIKACI ==="
             PythonBuildFailed = "Sestavení Python aplikace selhalo s kódem:"
             PythonModulesCheck = "Zkontrolovat Python moduly"
@@ -805,6 +815,11 @@ function Get-Text {
             PythonBuild = "Python-Anwendung erstellen (PyInstaller)"
             PythonRuntimeMissing = "Python wurde nicht gefunden. Installieren Sie Python und fügen Sie es zu PATH hinzu."
             PythonEntryMissing = "Keine Python-Einstiegsdatei (.py) im Projektstamm gefunden."
+            PythonEntrySelectTitle = "PYTHON-EINSTIEGSDATEI AUSWÄHLEN"
+            PythonEntrySelectionFailed = "Die Python-Einstiegsdatei konnte nicht ausgewählt werden."
+            PythonSpecFallback = "[WARNUNG] Die Einstiegsdatei konnte nicht aus den .spec-Dateien ermittelt werden. Bitte eine Python-Datei auswählen:"
+            PythonProcessLaunchFailed = "Python konnte nicht gestartet werden:"
+            PythonRunFailed = "Python-Projekt mit Exitcode beendet:"
             PythonBuildTitle = "=== PYTHON-ANWENDUNG WIRD ERSTELLT ==="
             PythonBuildFailed = "Erstellen der Python-Anwendung fehlgeschlagen, Exitcode:"
             PythonModulesCheck = "Python-Module überprüfen"
@@ -1696,26 +1711,350 @@ function Invoke-PythonProjectTests {
     Invoke-PythonLoggedCommand -ProjectPath $ProjectPath -Runtime $Runtime -PythonArguments $pythonArgs -CheckType "Python tests ($testRunner)" -Lang $Lang
 }
 
-function Select-PythonEntryPoint {
-    param ([string]$ProjectPath, [string]$ProjectName, [string]$Lang)
+function Get-PythonSpecEntryPoints {
+    param ([string[]]$SpecPaths, [hashtable]$Runtime)
 
-    $preferredNames = @("main.py", "app.py", "$ProjectName.py")
-    foreach ($name in $preferredNames) {
-        $candidate = Join-Path $ProjectPath $name
-        if (Test-Path $candidate) { return $candidate }
+    $inspectionScript = @'
+import ast
+import json
+import os
+import sys
+import tokenize
+
+definition_nodes = (ast.FunctionDef, ast.ClassDef)
+if hasattr(ast, 'AsyncFunctionDef'):
+    definition_nodes += (ast.AsyncFunctionDef,)
+
+
+def bindings(tree, name):
+    found = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Name) and node.id == name and isinstance(node.ctx, (ast.Store, ast.Del)):
+            found.append(node)
+        elif isinstance(node, definition_nodes) and node.name == name:
+            found.append(node)
+        elif isinstance(node, ast.arg) and node.arg == name:
+            found.append(node)
+        elif isinstance(node, (ast.Import, ast.ImportFrom)):
+            for alias in node.names:
+                imported_name = alias.name.split('.')[0] if isinstance(node, ast.Import) else alias.name
+                if (alias.asname or imported_name) == name:
+                    found.append(alias)
+    return found
+
+
+def spec_path_call(node):
+    return (
+        isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Name)
+        and node.func.id == 'Path'
+        and len(node.args) == 1
+        and isinstance(node.args[0], ast.Name)
+        and node.args[0].id == 'SPECPATH'
+        and not node.keywords
+    )
+
+
+def path_roots(tree):
+    imports = [
+        alias
+        for node in tree.body
+        if isinstance(node, ast.ImportFrom) and node.module == 'pathlib'
+        for alias in node.names
+        if alias.name == 'Path' and (alias.asname is None or alias.asname == 'Path')
+    ]
+    path_bindings = bindings(tree, 'Path')
+    if len(imports) != 1 or len(path_bindings) != 1 or path_bindings[0] is not imports[0]:
+        return None
+    if bindings(tree, 'SPECPATH') or bindings(tree, 'str'):
+        return None
+
+    roots = {}
+    for node in tree.body:
+        if not isinstance(node, ast.Assign) or len(node.targets) != 1:
+            continue
+        target = node.targets[0]
+        if not isinstance(target, ast.Name) or not spec_path_call(node.value):
+            continue
+        assignments = bindings(tree, target.id)
+        if len(assignments) == 1 and assignments[0] is target:
+            roots[target.id] = node.lineno
+    return roots
+
+
+def static_path(node, roots, spec_dir, analysis_line):
+    if isinstance(node, ast.Name) and node.id in roots and roots[node.id] < analysis_line:
+        return spec_dir
+    if spec_path_call(node):
+        return spec_dir
+    if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div):
+        parent = static_path(node.left, roots, spec_dir, analysis_line)
+        try:
+            part = ast.literal_eval(node.right)
+        except (ValueError, TypeError):
+            return None
+        if parent is not None and isinstance(part, str):
+            return os.path.join(parent, part)
+    return None
+
+
+def static_script(node, roots, spec_dir, analysis_line):
+    try:
+        value = ast.literal_eval(node)
+    except (ValueError, TypeError):
+        value = None
+    if isinstance(value, str):
+        return value
+    if (
+        roots is not None
+        and isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Name)
+        and node.func.id == 'str'
+        and len(node.args) == 1
+        and not node.keywords
+    ):
+        return static_path(node.args[0], roots, spec_dir, analysis_line)
+    return None
+
+
+paths = []
+seen = set()
+issues = []
+
+for spec_path in sys.argv[1:]:
+    try:
+        with tokenize.open(spec_path) as source:
+            tree = ast.parse(source.read(), filename=spec_path)
+    except (OSError, UnicodeError, SyntaxError) as error:
+        issues.append('{}: {}'.format(spec_path, error))
+        continue
+
+    roots = path_roots(tree)
+    found_analysis = False
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        if not (
+            isinstance(node.func, ast.Name) and node.func.id == 'Analysis'
+            or isinstance(node.func, ast.Attribute) and node.func.attr == 'Analysis'
+        ):
+            continue
+
+        found_analysis = True
+        scripts_node = node.args[0] if node.args else next(
+            (keyword.value for keyword in node.keywords if keyword.arg == 'scripts'), None
+        )
+        if not isinstance(scripts_node, (ast.List, ast.Tuple)):
+            issues.append('{}: Analysis scripts are not a static list.'.format(spec_path))
+            continue
+
+        scripts = [
+            static_script(script, roots, os.path.dirname(spec_path), node.lineno)
+            for script in scripts_node.elts
+        ]
+        if not scripts or any(not script for script in scripts):
+            issues.append('{}: Analysis scripts contain unsupported or empty paths.'.format(spec_path))
+            continue
+
+        for script in scripts:
+            entry_path = os.path.abspath(os.path.join(os.path.dirname(spec_path), script))
+            if not entry_path.lower().endswith(('.py', '.pyw')) or not os.path.isfile(entry_path):
+                issues.append('{}: Python entry point not found: {}'.format(spec_path, script))
+                continue
+            key = os.path.normcase(entry_path)
+            if key not in seen:
+                seen.add(key)
+                paths.append(entry_path)
+
+    if not found_analysis:
+        issues.append('{}: no Analysis call found.'.format(spec_path))
+
+print(json.dumps({'paths': paths, 'issues': issues}))
+'@
+
+    $pythonArgs = @($Runtime.Prefix) + @("-I", "-S", "-c", $inspectionScript) + @($SpecPaths)
+    try {
+        $output = @(& $Runtime.Path @pythonArgs 2>&1)
+        $exitCode = $LASTEXITCODE
+    } catch {
+        return [PSCustomObject]@{ Paths = @(); Issues = @($_.Exception.Message) }
     }
 
-    $pythonFiles = @(Get-ChildItem -Path $ProjectPath -Filter "*.py" -File -ErrorAction SilentlyContinue)
-    if ($pythonFiles.Count -eq 1) { return $pythonFiles[0].FullName }
-    if ($pythonFiles.Count -gt 1) {
-        $options = @($pythonFiles | ForEach-Object { $_.Name }) + @((Get-Text 'Back' $Lang))
-        $selection = Show-Menu -Title (Get-Text 'PythonProjectType' $Lang) -Options $options
-        if ($selection -ge 0 -and $selection -lt $pythonFiles.Count) {
-            return $pythonFiles[$selection].FullName
+    if ($exitCode -ne 0) {
+        $detail = ($output | ForEach-Object { $_.ToString() }) -join "`n"
+        if ([string]::IsNullOrWhiteSpace($detail)) { $detail = "Python exit code: $exitCode" }
+        return [PSCustomObject]@{ Paths = @(); Issues = @($detail) }
+    }
+
+    try {
+        $result = (($output | ForEach-Object { $_.ToString() }) -join "`n") | ConvertFrom-Json -ErrorAction Stop
+        if ($null -eq $result -or $null -eq $result.paths -or $null -eq $result.issues) {
+            throw "Invalid .spec inspection result."
+        }
+        return [PSCustomObject]@{ Paths = @($result.paths); Issues = @($result.issues) }
+    } catch {
+        return [PSCustomObject]@{ Paths = @(); Issues = @($_.Exception.Message) }
+    }
+}
+
+function Select-PythonEntryPoint {
+    param ([string]$ProjectPath, [string]$ProjectName, [string]$Lang, [hashtable]$Runtime)
+
+    $specFiles = @(Get-ChildItem -LiteralPath $ProjectPath -Filter "*.spec" -File -ErrorAction SilentlyContinue)
+    $specIssues = @()
+    if ($specFiles.Count -gt 0) {
+        $specResult = Get-PythonSpecEntryPoints -SpecPaths @($specFiles | ForEach-Object { $_.FullName }) -Runtime $Runtime
+        if ($specResult.Issues.Count -gt 0) {
+            $specIssues = @($specResult.Issues)
+            Write-Host (Get-Text 'PythonSpecFallback' $Lang) -ForegroundColor Yellow
+            $specIssues | ForEach-Object { Write-Host "  $_" -ForegroundColor Yellow }
+        } elseif ($specResult.Paths.Count -eq 1) {
+            return [PSCustomObject]@{ Status = "Selected"; Path = $specResult.Paths[0] }
+        } elseif ($specResult.Paths.Count -gt 1) {
+            $rootPrefix = [System.IO.Path]::GetFullPath($ProjectPath).TrimEnd('\') + '\'
+            $options = @($specResult.Paths | ForEach-Object {
+                if ($_.StartsWith($rootPrefix, [System.StringComparison]::OrdinalIgnoreCase)) {
+                    $_.Substring($rootPrefix.Length)
+                } else {
+                    $_
+                }
+            }) + @((Get-Text 'Back' $Lang))
+            $selection = Show-Menu -Title (Get-Text 'PythonEntrySelectTitle' $Lang) -Options $options
+            if ($selection -ge 0 -and $selection -lt $specResult.Paths.Count) {
+                return [PSCustomObject]@{ Status = "Selected"; Path = $specResult.Paths[$selection] }
+            }
+            return [PSCustomObject]@{ Status = "Cancelled"; Path = $null }
         }
     }
 
-    return $null
+    if ($specIssues.Count -eq 0) {
+        $preferredNames = @("main.py", "app.py", "$ProjectName.py")
+        foreach ($name in $preferredNames) {
+            $candidate = Join-Path $ProjectPath $name
+            if (Test-Path -LiteralPath $candidate -PathType Leaf) {
+                return [PSCustomObject]@{ Status = "Selected"; Path = $candidate }
+            }
+        }
+    }
+
+    $pythonFiles = @(Get-ChildItem -LiteralPath $ProjectPath -Filter "*.py" -File -ErrorAction SilentlyContinue)
+    if ($pythonFiles.Count -eq 1 -and $specIssues.Count -eq 0) {
+        return [PSCustomObject]@{ Status = "Selected"; Path = $pythonFiles[0].FullName }
+    }
+    if ($pythonFiles.Count -gt 0) {
+        $options = @($pythonFiles | ForEach-Object { $_.Name }) + @((Get-Text 'Back' $Lang))
+        $title = Get-Text 'PythonEntrySelectTitle' $Lang
+        if ($specIssues.Count -gt 0) {
+            $title += "`n$(Get-Text 'PythonSpecFallback' $Lang)`n$($specIssues -join "`n")"
+        }
+        $selection = Show-Menu -Title $title -Options $options
+        if ($selection -ge 0 -and $selection -lt $pythonFiles.Count) {
+            return [PSCustomObject]@{ Status = "Selected"; Path = $pythonFiles[$selection].FullName }
+        }
+        return [PSCustomObject]@{ Status = "Cancelled"; Path = $null }
+    }
+
+    return [PSCustomObject]@{ Status = "Missing"; Path = $null }
+}
+
+function Invoke-PythonProjectRun {
+    param ([string]$ProjectPath, [string]$ProjectName, [string]$Lang)
+
+    $python = Get-PythonRuntime -ProjectPath $ProjectPath
+    if (-not $python) {
+        Write-Host (Get-Text 'PythonRuntimeMissing' $Lang) -ForegroundColor Red
+        return $false
+    }
+
+    $entry = Select-PythonEntryPoint -ProjectPath $ProjectPath -ProjectName $ProjectName -Lang $Lang -Runtime $python
+    if ($entry.Status -eq "Cancelled") { return $true }
+    if ($entry.Status -eq "Missing") {
+        Write-Host (Get-Text 'PythonEntryMissing' $Lang) -ForegroundColor Red
+        return $false
+    }
+    if ($entry.Status -ne "Selected" -or -not $entry.Path) {
+        Write-Host (Get-Text 'PythonEntrySelectionFailed' $Lang) -ForegroundColor Red
+        return $false
+    }
+
+    $pythonArgs = @($python.Prefix) + @($entry.Path)
+    try {
+        Push-Location -LiteralPath $ProjectPath -ErrorAction Stop
+        try {
+            & $python.Path @pythonArgs | Out-Host
+            $exitCode = $LASTEXITCODE
+        } finally {
+            Pop-Location
+        }
+    } catch {
+        Write-Host "$(Get-Text 'PythonProcessLaunchFailed' $Lang) $_" -ForegroundColor Red
+        return $false
+    }
+
+    if ($exitCode -ne 0) {
+        Write-Host "$(Get-Text 'PythonRunFailed' $Lang) $exitCode" -ForegroundColor Red
+        return $false
+    }
+    return $true
+}
+
+function Invoke-PythonProjectBuild {
+    param ([string]$ProjectPath, [string]$ProjectName, [string]$Lang)
+
+    Write-Host (Get-Text 'PythonBuildTitle' $Lang) -ForegroundColor Cyan
+    $python = Get-PythonRuntime -ProjectPath $ProjectPath
+    if (-not $python) {
+        Write-Host (Get-Text 'PythonRuntimeMissing' $Lang) -ForegroundColor Red
+        return $false
+    }
+
+    $specFiles = @(Get-ChildItem -LiteralPath $ProjectPath -Filter "*.spec" -File -ErrorAction SilentlyContinue)
+    $specPath = $null
+    if ($specFiles.Count -eq 1) {
+        $specPath = $specFiles[0].FullName
+    } elseif ($specFiles.Count -gt 1) {
+        $specOptions = @($specFiles | ForEach-Object { $_.Name }) + @((Get-Text 'Back' $Lang))
+        $specSelection = Show-Menu -Title (Get-Text 'PythonBuildTitle' $Lang) -Options $specOptions
+        if ($specSelection -ge 0 -and $specSelection -lt $specFiles.Count) {
+            $specPath = $specFiles[$specSelection].FullName
+        } else {
+            return $true
+        }
+    }
+
+    if ($specPath) {
+        $pythonArgs = Get-PythonBuildArguments -Runtime $python -SpecPath $specPath
+    } else {
+        $entry = Select-PythonEntryPoint -ProjectPath $ProjectPath -ProjectName $ProjectName -Lang $Lang -Runtime $python
+        if ($entry.Status -eq "Cancelled") { return $true }
+        if ($entry.Status -eq "Missing") {
+            Write-Host (Get-Text 'PythonEntryMissing' $Lang) -ForegroundColor Red
+            return $false
+        }
+        if ($entry.Status -ne "Selected" -or -not $entry.Path) {
+            Write-Host (Get-Text 'PythonEntrySelectionFailed' $Lang) -ForegroundColor Red
+            return $false
+        }
+        $pythonArgs = Get-PythonBuildArguments -Runtime $python -EntryPoint $entry.Path
+    }
+
+    try {
+        Push-Location -LiteralPath $ProjectPath -ErrorAction Stop
+        try {
+            & $python.Path @pythonArgs | Out-Host
+            $exitCode = $LASTEXITCODE
+        } finally {
+            Pop-Location
+        }
+    } catch {
+        Write-Host "$(Get-Text 'PythonProcessLaunchFailed' $Lang) $_" -ForegroundColor Red
+        return $false
+    }
+
+    if ($exitCode -ne 0) {
+        Write-Host "`n$(Get-Text 'PythonBuildFailed' $Lang) $exitCode" -ForegroundColor Red
+    }
+    return $false
 }
 
 # --- 1. Inicializace chybějících složek a šablon ---
@@ -2980,59 +3319,10 @@ while ($true) {
 
         switch ($selectedAction) {
             "$(Get-Text 'PythonRun' $L)" {
-                $python = Get-PythonRuntime -ProjectPath $projectPath
-                if (-not $python) {
-                    Write-Host (Get-Text 'PythonRuntimeMissing' $L) -ForegroundColor Red
-                } else {
-                    $entryPoint = Select-PythonEntryPoint -ProjectPath $projectPath -ProjectName $selectedProject -Lang $L
-                    if (-not $entryPoint) {
-                        Write-Host (Get-Text 'PythonEntryMissing' $L) -ForegroundColor Red
-                    } else {
-                        $pythonArgs = @($python.Prefix) + @($entryPoint)
-                        & $python.Path @pythonArgs
-                    }
-                }
+                $skipPause = Invoke-PythonProjectRun -ProjectPath $projectPath -ProjectName $selectedProject -Lang $L
             }
             "$(Get-Text 'PythonBuild' $L)" {
-                Write-Host (Get-Text 'PythonBuildTitle' $L) -ForegroundColor Cyan
-                $python = Get-PythonRuntime -ProjectPath $projectPath
-                if (-not $python) {
-                    Write-Host (Get-Text 'PythonRuntimeMissing' $L) -ForegroundColor Red
-                } else {
-                    $specFiles = @(Get-ChildItem -Path $projectPath -Filter "*.spec" -File -ErrorAction SilentlyContinue)
-                    $specPath = $null
-                    if ($specFiles.Count -eq 1) {
-                        $specPath = $specFiles[0].FullName
-                    } elseif ($specFiles.Count -gt 1) {
-                        $specOptions = @($specFiles | ForEach-Object { $_.Name }) + @((Get-Text 'Back' $L))
-                        $specSelection = Show-Menu -Title (Get-Text 'PythonBuildTitle' $L) -Options $specOptions
-                        if ($specSelection -ge 0 -and $specSelection -lt $specFiles.Count) {
-                            $specPath = $specFiles[$specSelection].FullName
-                        }
-                    }
-
-                    if ($specFiles.Count -gt 0 -and -not $specPath) {
-                        $skipPause = $true
-                        continue
-                    }
-
-                    if ($specPath) {
-                        $pythonArgs = Get-PythonBuildArguments -Runtime $python -SpecPath $specPath
-                    } else {
-                        $entryPoint = Select-PythonEntryPoint -ProjectPath $projectPath -ProjectName $selectedProject -Lang $L
-                        if (-not $entryPoint) {
-                            Write-Host (Get-Text 'PythonEntryMissing' $L) -ForegroundColor Red
-                            $skipPause = $true
-                            continue
-                        }
-                        $pythonArgs = Get-PythonBuildArguments -Runtime $python -EntryPoint $entryPoint
-                    }
-
-                    & $python.Path @pythonArgs
-                    if ($LASTEXITCODE -ne 0) {
-                        Write-Host "`n$(Get-Text 'PythonBuildFailed' $L) $LASTEXITCODE" -ForegroundColor Red
-                    }
-                }
+                $skipPause = Invoke-PythonProjectBuild -ProjectPath $projectPath -ProjectName $selectedProject -Lang $L
             }
             "$(Get-Text 'PythonModulesCheck' $L)" {
                 Write-Host (Get-Text 'PythonModulesTitle' $L) -ForegroundColor Cyan
